@@ -1,0 +1,87 @@
+﻿using System;
+using System.Data;
+using System.Data.SqlClient;
+using System.Drawing;
+using System.IO;
+using System.Windows.Forms;
+
+namespace ProjectDishes
+{
+    public partial class RecipeDetailsForm : Form
+    {
+        private int recipeId;
+
+        public RecipeDetailsForm(int recipeId)
+        {
+            InitializeComponent(); 
+            AppStyle.ApplyStyle(this); 
+            this.recipeId = recipeId;
+            LoadRecipeDetails(); 
+            this.MaximizeBox = false;
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
+        }
+
+        private void LoadRecipeDetails() //загрузка деталей
+        {
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@RecipeID", recipeId)
+            };
+
+            DataTable recipeDetails = DatabaseHelper.ExecuteQuery("GetRecipeDetails", parameters);
+
+            if (recipeDetails.Rows.Count == 0)
+            {
+                MessageBox.Show("Информация о рецепте не найдена.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.Close();
+                return;
+            }
+
+            DataRow row = recipeDetails.Rows[0];
+
+            lblRecipeName.Text = row["RecipeName"].ToString();
+            lblRecipeName.AutoSize = true; 
+            lblRecipeName.Size = new Size(320, lblRecipeName.PreferredHeight); 
+
+            lblCategory.Text = $"Категория: {row["CategoryName"]}";
+            lblCategory.AutoSize = false;
+            lblCategory.MaximumSize = new Size(320, 0);
+            lblCategory.Size = new Size(320, lblCategory.PreferredHeight);
+
+            txtDescription.Text = row["Description"].ToString();
+            txtDescription.Height = 110; 
+            txtDescription.ScrollBars = ScrollBars.Vertical; 
+            ConfigureReadOnlyTextBox(txtDescription);
+
+            txtIngredients.Text = row["Ingredients"].ToString();
+            txtIngredients.Height = 100;
+            txtIngredients.ScrollBars = ScrollBars.Vertical;
+            ConfigureReadOnlyTextBox(txtIngredients);
+
+            if (row["Image"] != DBNull.Value)
+            {
+                byte[] imageData = (byte[])row["Image"];
+                using (MemoryStream ms = new MemoryStream(imageData))
+                {
+                    pictureBoxRecipe.Image = Image.FromStream(ms);
+                    pictureBoxRecipe.SizeMode = PictureBoxSizeMode.Zoom;
+                }
+            }
+            else
+            {
+                pictureBoxRecipe.Image = null;
+            }
+        }
+        private void ConfigureReadOnlyTextBox(TextBox textBox)
+        {
+            textBox.ReadOnly = true;
+            textBox.TabStop = false;
+            textBox.Multiline = true;
+        }
+
+        private void pictureBoxRecipe_Click(object sender, EventArgs e)
+        {
+
+        }
+    }
+}
