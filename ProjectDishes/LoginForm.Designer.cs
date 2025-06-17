@@ -29,109 +29,100 @@ namespace ProjectDishes
         /// </summary>
         private void InitializeComponent()
         {
-            this.btnToLogin = new System.Windows.Forms.Button();
-            this.btnLogin = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.txtPassword = new System.Windows.Forms.TextBox();
-            this.txtUserName = new System.Windows.Forms.TextBox();
-            this.btnExit = new System.Windows.Forms.Button();
-            this.SuspendLayout();
+            btnToLogin = new System.Windows.Forms.Button();
+            btnLogin = new System.Windows.Forms.Button();
+            label2 = new System.Windows.Forms.Label();
+            label1 = new System.Windows.Forms.Label();
+            txtPassword = new System.Windows.Forms.TextBox();
+            txtUserName = new System.Windows.Forms.TextBox();
+            btnExit = new System.Windows.Forms.Button();
+            SuspendLayout();
             // 
             // btnToLogin
             // 
-            this.btnToLogin.Location = new System.Drawing.Point(106, 236);
-            this.btnToLogin.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.btnToLogin.Name = "btnToLogin";
-            this.btnToLogin.Size = new System.Drawing.Size(110, 24);
-            this.btnToLogin.TabIndex = 15;
-            this.btnToLogin.Text = "Зарегистрировать";
-            this.btnToLogin.UseVisualStyleBackColor = true;
-            this.btnToLogin.Click += new System.EventHandler(this.btnToLogin_Click);
+            btnToLogin.Location = new System.Drawing.Point(124, 303);
+            btnToLogin.Name = "btnToLogin";
+            btnToLogin.Size = new System.Drawing.Size(180, 37);
+            btnToLogin.TabIndex = 15;
+            btnToLogin.Text = "Зарегистрировать";
+            btnToLogin.UseVisualStyleBackColor = true;
+            btnToLogin.Click += btnToLogin_Click;
             // 
             // btnLogin
             // 
-            this.btnLogin.Location = new System.Drawing.Point(106, 198);
-            this.btnLogin.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.btnLogin.Name = "btnLogin";
-            this.btnLogin.Size = new System.Drawing.Size(110, 33);
-            this.btnLogin.TabIndex = 14;
-            this.btnLogin.Text = "Войти";
-            this.btnLogin.UseVisualStyleBackColor = true;
-            this.btnLogin.Click += new System.EventHandler(this.btnLogin_Click_1);
+            btnLogin.Location = new System.Drawing.Point(124, 246);
+            btnLogin.Name = "btnLogin";
+            btnLogin.Size = new System.Drawing.Size(180, 51);
+            btnLogin.TabIndex = 14;
+            btnLogin.Text = "Войти";
+            btnLogin.UseVisualStyleBackColor = true;
+            btnLogin.Click += btnLogin_Click_1;
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
-            this.label2.BackColor = System.Drawing.Color.Transparent;
-            this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(104, 148);
-            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(45, 13);
-            this.label2.TabIndex = 13;
-            this.label2.Text = "Пароль";
+            label2.AutoSize = true;
+            label2.BackColor = System.Drawing.Color.Transparent;
+            label2.ForeColor = System.Drawing.Color.White;
+            label2.Location = new System.Drawing.Point(124, 157);
+            label2.Name = "label2";
+            label2.Size = new System.Drawing.Size(62, 20);
+            label2.TabIndex = 13;
+            label2.Text = "Пароль";
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.BackColor = System.Drawing.Color.Transparent;
-            this.label1.ForeColor = System.Drawing.Color.White;
-            this.label1.Location = new System.Drawing.Point(104, 111);
-            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(38, 13);
-            this.label1.TabIndex = 12;
-            this.label1.Text = "Логин";
+            label1.AutoSize = true;
+            label1.BackColor = System.Drawing.Color.Transparent;
+            label1.ForeColor = System.Drawing.Color.White;
+            label1.Location = new System.Drawing.Point(124, 89);
+            label1.Name = "label1";
+            label1.Size = new System.Drawing.Size(52, 20);
+            label1.TabIndex = 12;
+            label1.Text = "Логин";
             // 
             // txtPassword
             // 
-            this.txtPassword.Location = new System.Drawing.Point(106, 164);
-            this.txtPassword.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.txtPassword.Name = "txtPassword";
-            this.txtPassword.Size = new System.Drawing.Size(110, 20);
-            this.txtPassword.TabIndex = 11;
+            txtPassword.Location = new System.Drawing.Point(124, 195);
+            txtPassword.Name = "txtPassword";
+            txtPassword.Size = new System.Drawing.Size(180, 27);
+            txtPassword.TabIndex = 11;
             // 
             // txtUserName
             // 
-            this.txtUserName.Location = new System.Drawing.Point(106, 128);
-            this.txtUserName.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.txtUserName.Name = "txtUserName";
-            this.txtUserName.Size = new System.Drawing.Size(110, 20);
-            this.txtUserName.TabIndex = 10;
+            txtUserName.Location = new System.Drawing.Point(124, 122);
+            txtUserName.Name = "txtUserName";
+            txtUserName.Size = new System.Drawing.Size(180, 27);
+            txtUserName.TabIndex = 10;
             // 
             // btnExit
             // 
-            this.btnExit.Location = new System.Drawing.Point(106, 270);
-            this.btnExit.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.btnExit.Name = "btnExit";
-            this.btnExit.Size = new System.Drawing.Size(110, 24);
-            this.btnExit.TabIndex = 16;
-            this.btnExit.Text = "Выйи";
-            this.btnExit.UseVisualStyleBackColor = true;
-            this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
+            btnExit.Location = new System.Drawing.Point(124, 360);
+            btnExit.Name = "btnExit";
+            btnExit.Size = new System.Drawing.Size(180, 37);
+            btnExit.TabIndex = 16;
+            btnExit.Text = "Выйи";
+            btnExit.UseVisualStyleBackColor = true;
+            btnExit.Click += btnExit_Click;
             // 
             // LoginForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.Lavender;
-            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(342, 353);
-            this.Controls.Add(this.btnExit);
-            this.Controls.Add(this.btnToLogin);
-            this.Controls.Add(this.btnLogin);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.txtPassword);
-            this.Controls.Add(this.txtUserName);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.Name = "LoginForm";
-            this.Text = "Авторизация";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.LoginForm_FormClosed);
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+            AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            BackColor = System.Drawing.Color.Lavender;
+            BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            ClientSize = new System.Drawing.Size(456, 543);
+            Controls.Add(btnExit);
+            Controls.Add(btnToLogin);
+            Controls.Add(btnLogin);
+            Controls.Add(label2);
+            Controls.Add(label1);
+            Controls.Add(txtPassword);
+            Controls.Add(txtUserName);
+            Name = "LoginForm";
+            Text = "Авторизация";
+            FormClosed += LoginForm_FormClosed;
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion

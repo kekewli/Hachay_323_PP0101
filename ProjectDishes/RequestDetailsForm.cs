@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data;
-using System.Data.SqlClient;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
@@ -21,49 +20,44 @@ namespace ProjectDishes
         }
         private void LoadRequestDetails() //загрузка заппросов
         {
-            SqlParameter[] parameters = new SqlParameter[]
+            var rpcParams = new { p0 = requestId };
+            DataTable dt = DatabaseHelper
+                .ExecuteQuery("get_request_details", rpcParams)
+                .GetAwaiter().GetResult();
+            if (dt.Rows.Count == 0)
             {
-                new SqlParameter("@RequestID", requestId)
-            };
-
-            DataTable recipeDetails = DatabaseHelper.ExecuteQuery("GetRequestDetails", parameters);
-
-            if (recipeDetails.Rows.Count == 0)
-            {
-                MessageBox.Show("Информация о рецепте не найдена.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Информация о запросе не найдена.", "Ошибка",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.Close();
                 return;
             }
+            DataRow row = dt.Rows[0];
 
-            DataRow row = recipeDetails.Rows[0];
-
-            lblRecipeName.Text = row["RecipeName"].ToString();
+            lblRecipeName.Text = row["recipe_name"].ToString();
             lblRecipeName.AutoSize = true;
             lblRecipeName.Size = new Size(320, lblRecipeName.PreferredHeight);
 
-            lblCategory.Text = $"Категория: {row["CategoryName"]}";
+            lblCategory.Text = $"Категория: {row["category_name"]}";
             lblCategory.AutoSize = false;
             lblCategory.MaximumSize = new Size(320, 0);
             lblCategory.Size = new Size(320, lblCategory.PreferredHeight);
 
-            txtDescription.Text = row["Description"].ToString();
+            txtDescription.Text = row["description"].ToString();
             txtDescription.Height = 110;
             txtDescription.ScrollBars = ScrollBars.Vertical;
             ConfigureReadOnlyTextBox(txtDescription);
 
-            txtIngredients.Text = row["Ingredients"].ToString();
+            txtIngredients.Text = row["ingredients"].ToString();
             txtIngredients.Height = 100;
             txtIngredients.ScrollBars = ScrollBars.Vertical;
             ConfigureReadOnlyTextBox(txtIngredients);
 
-            if (row["Image"] != DBNull.Value)
+            if (row["image"] != DBNull.Value)
             {
-                byte[] imageData = (byte[])row["Image"];
-                using (MemoryStream ms = new MemoryStream(imageData))
-                {
-                    pictureBoxRequest.Image = Image.FromStream(ms);
-                    pictureBoxRequest.SizeMode = PictureBoxSizeMode.Zoom;
-                }
+                byte[] imageData = (byte[])row["image"];
+                using var ms = new MemoryStream(imageData);
+                pictureBoxRequest.Image = Image.FromStream(ms);
+                pictureBoxRequest.SizeMode = PictureBoxSizeMode.Zoom;
             }
             else
             {

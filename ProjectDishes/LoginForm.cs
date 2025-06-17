@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data;
-using System.Data.SqlClient;
 using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Forms;
@@ -15,41 +14,37 @@ namespace ProjectDishes
             this.MaximizeBox = false;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             txtPassword.PasswordChar = '*';
-            AppStyle.ApplyStyle(this);
         }
-        private void btnToLogin_Click(object sender, EventArgs e) //перезод к регистрации
+        private void btnToLogin_Click(object sender, EventArgs e) //пехезод к форме регистрации
         {
             RegisterForm registerForm = new RegisterForm();
             registerForm.Show();
             this.Hide();
         }
-        private void btnLogin_Click_1(object sender, EventArgs e)
+        private async void btnLogin_Click_1(object sender, EventArgs e) //кнопка авторизации
         {
-            string userName = txtUserName.Text.Trim();
-            string password = txtPassword.Text.Trim();
+            var userName = txtUserName.Text.Trim();
+            var password = txtPassword.Text.Trim();
             if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(password))
             {
                 MessageBox.Show("Введите логин и пароль.", "Ошибка авторизации", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            string hashedPassword = HashPassword(password);
-            SqlParameter[] parameters = new SqlParameter[]
-            {
-                new SqlParameter("@UserName", userName),
-                new SqlParameter("@Password", hashedPassword)
-            };
-            DataTable result = DatabaseHelper.ExecuteQuery("LoginUser", parameters);
+            var hashedPassword = HashPassword(password);
+            var rpcParams = new { p_name = userName, p_pass = hashedPassword };
+            DataTable result = await DatabaseHelper.ExecuteQuery("login_user", rpcParams);
             if (result.Rows.Count > 0)
             {
-                int roleID = Convert.ToInt32(result.Rows[0]["RoleID"]);
-                if (roleID == 1)
+                int roleId = Convert.ToInt32(result.Rows[0]["role_id"]);
+                int userId = Convert.ToInt32(result.Rows[0]["user_id"]);
+                if (roleId == 1)
                 {
-                    AdminForm adminForm = new AdminForm();
+                    var adminForm = new AdminForm();
                     adminForm.Show();
                 }
                 else
                 {
-                    UserForm userForm = new UserForm(Convert.ToInt32(result.Rows[0]["UserID"]));
+                    var userForm = new UserForm(userId);
                     userForm.Show();
                 }
                 this.Hide();
@@ -61,18 +56,17 @@ namespace ProjectDishes
         }
         private string HashPassword(string password) //хеширование пароля
         {
-            using (SHA256 sha256 = SHA256.Create())
+            using (var sha256 = SHA256.Create())
             {
                 byte[] bytes = Encoding.UTF8.GetBytes(password);
                 byte[] hash = sha256.ComputeHash(bytes);
-                StringBuilder result = new StringBuilder();
-                foreach (byte b in hash)
-                {
-                    result.Append(b.ToString("x2"));
-                }
-                return result.ToString();
+                var sb = new StringBuilder();
+                foreach (var b in hash)
+                    sb.Append(b.ToString("x2"));
+                return sb.ToString();
             }
         }
+
         private void pictureBox1_Click(object sender, EventArgs e)
         {
 

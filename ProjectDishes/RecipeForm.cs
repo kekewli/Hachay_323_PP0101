@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Data;
-using System.Data.SqlClient;
+using Npgsql;
 using System.Drawing;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Shapes;
 
 namespace ProjectDishes
 {
@@ -14,7 +16,7 @@ namespace ProjectDishes
         public RecipeForm()
         {
             InitializeComponent();
-            LoadCategories();
+            _ = LoadCategories();
             AppStyle.ApplyStyle(this);
             this.MaximizeBox = false;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
@@ -22,44 +24,36 @@ namespace ProjectDishes
         }
         public RecipeForm(int recipeId)
         {
-            InitializeComponent();
             this.recipeId = recipeId;
-            LoadCategories();
+            _ = LoadCategories();
             LoadRecipeDetails();
-            AppStyle.ApplyStyle(this);
-            this.FormBorderStyle = FormBorderStyle.FixedSingle;
-            ConfigurePictureBox();
         }
-        private void LoadCategories()
+        private async Task LoadCategories() //загрузка категорий
         {
-            DataTable categories = DatabaseHelper.ExecuteQuery("GetCategories");
+            DataTable categories = await DatabaseHelper.ExecuteQuery("get_categories");
             comboBoxCategory.DataSource = categories;
-            comboBoxCategory.DisplayMember = "CategoryName";
-            comboBoxCategory.ValueMember = "CategoryID";
+            comboBoxCategory.DisplayMember = "category_name"; 
+            comboBoxCategory.ValueMember = "category_id";
         }
-        private void LoadRecipeDetails() //загрузка деталей
+        private void LoadRecipeDetails()
         {
-            SqlParameter[] parameters = new SqlParameter[]
+            var rpcParams = new { p0 = recipeId };
+            DataTable dt = DatabaseHelper
+                .ExecuteQuery("get_recipe_by_id", rpcParams)
+                .GetAwaiter().GetResult();
+            if (dt.Rows.Count == 0) return;
+            var row = dt.Rows[0];
+            txtRecipeName.Text = row["recipe_name"].ToString();
+            txtDescription.Text = row["description"].ToString();
+            txtIngredients.Text = row["ingredients"].ToString();
+            comboBoxCategory.SelectedValue = row["category_id"];
+            if (row["image"] != DBNull.Value)
             {
-                new SqlParameter("@RecipeID", recipeId)
-            };
-            DataTable recipeDetails = DatabaseHelper.ExecuteQuery("GetRecipeById", parameters);
-            if (recipeDetails.Rows.Count > 0)
-            {
-                txtRecipeName.Text = recipeDetails.Rows[0]["RecipeName"].ToString();
-                txtDescription.Text = recipeDetails.Rows[0]["Description"].ToString();
-                txtIngredients.Text = recipeDetails.Rows[0]["Ingredients"].ToString();
-                comboBoxCategory.SelectedValue = recipeDetails.Rows[0]["CategoryID"];
-                if (recipeDetails.Rows[0]["Image"] != DBNull.Value)
-                {
-                    byte[] imageData = (byte[])recipeDetails.Rows[0]["Image"];
-                    using (MemoryStream ms = new MemoryStream(imageData))
-                    {
-                        pictureBoxRecipe.Image = Image.FromStream(ms);
-                        pictureBoxRecipe.SizeMode = PictureBoxSizeMode.Zoom;
-                        recipeImage = imageData;
-                    }
-                }
+                byte[] img = (byte[])row["image"];
+                using var ms = new MemoryStream(img);
+                pictureBoxRecipe.Image = Image.FromStream(ms);
+                pictureBoxRecipe.SizeMode = PictureBoxSizeMode.Zoom;
+                recipeImage = img;
             }
         }
         private void ConfigurePictureBox() //картинка
@@ -69,7 +63,7 @@ namespace ProjectDishes
             pictureBoxRecipe.DragDrop += PictureBoxRecipe_DragDrop;
             pictureBoxRecipe.Click += pictureBoxRecipe_Click;
         }
-        private void PictureBoxRecipe_DragEnter(object sender, DragEventArgs e) //драгндроп картинки
+        private void PictureBoxRecipe_DragEnter(object sender, DragEventArgs e) //драгентер картинки
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
@@ -81,10 +75,9 @@ namespace ProjectDishes
             string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
             if (files.Length > 0)
             {
-                string imagePath = files[0];
                 try
                 {
-                    DisplayImage(imagePath);
+                    DisplayImage(files[0]);
                 }
                 catch (Exception ex)
                 {
@@ -94,59 +87,55 @@ namespace ProjectDishes
         }
         private void btnUploadImage_Click(object sender, EventArgs e) //загрузка изоб.
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog
+            PickImageFromDialog();
+        }
+        private void PickImageFromDialog() 
+        {
+            using var dlg = new OpenFileDialog
             {
                 Filter = "Image Files|*.jpg;*.jpeg;*.png;*.gif;*.bmp",
                 Title = "Выберите изображение"
             };
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                DisplayImage(openFileDialog.FileName);
-            }
+            if (dlg.ShowDialog() == DialogResult.OK) DisplayImage(dlg.FileName);
         }
         private void DisplayImage(string filePath) //отображение изоб.
         {
             try
             {
-                Image image = Image.FromFile(filePath);
-                pictureBoxRecipe.Image = image;
+                var img = Image.FromFile(filePath);
+                pictureBoxRecipe.Image = img;
                 pictureBoxRecipe.SizeMode = PictureBoxSizeMode.Zoom;
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    image.Save(ms, image.RawFormat);
-                    recipeImage = ms.ToArray();
-                }
+                using var ms = new MemoryStream();
+                img.Save(ms, img.RawFormat);
+                recipeImage = ms.ToArray();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Ошибка при загрузке изображения: " + ex.Message);
+                MessageBox.Show($"Ошибка при загрузке изображения: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        private void btnSave_Click_1(object sender, EventArgs e) //сохранение
+        private async void btnSave_Click_1(object sender, EventArgs e) //сохранение рецепта
         {
-            string recipeName = txtRecipeName.Text.Trim();
-            string description = txtDescription.Text.Trim();
-            string ingredients = txtIngredients.Text.Trim();
-            int categoryId = Convert.ToInt32(comboBoxCategory.SelectedValue);
-
-            if (string.IsNullOrEmpty(recipeName) || string.IsNullOrEmpty(description) || string.IsNullOrEmpty(ingredients))
+            string name = txtRecipeName.Text.Trim();
+            string desc = txtDescription.Text.Trim();
+            string ingr = txtIngredients.Text.Trim();
+            int catId = Convert.ToInt32(comboBoxCategory.SelectedValue);
+            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(desc) || string.IsNullOrEmpty(ingr))
             {
-                MessageBox.Show("Пожалуйста, заполните все поля.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Пожалуйста, заполните все поля.", "Ошибка",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             if (recipeImage == null)
             {
-                DialogResult result = MessageBox.Show(
-                    "Вы не добавили изображение. Загрузить сейчас?",
-                    "Изображение отсутствует",
-                    MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Warning);
+                var res = MessageBox.Show(
+                    "Вы не добавили изображение. Загрузить сейчас?", "Изображение отсутствует", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
-                if (result == DialogResult.Yes)
+                if (res == DialogResult.Yes)
                 {
                     if (!TryLoadImageFromDialog())
                     {
-                        MessageBox.Show("Изображение не было добавлено. Рецепт не будет сохранён.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MessageBox.Show("Изображение не было добавлено — отмена сохранения.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
                 }
@@ -156,49 +145,41 @@ namespace ProjectDishes
                     return;
                 }
             }
-
-            SqlParameter[] parameters = new SqlParameter[]
+            var rpcParams = new
             {
-        new SqlParameter("@RecipeName", recipeName),
-        new SqlParameter("@Description", description),
-        new SqlParameter("@Ingredients", ingredients),
-        new SqlParameter("@CategoryID", categoryId),
-        new SqlParameter("@Image", recipeImage ?? (object)DBNull.Value)
+                p_name = name,
+                p_desc = desc,
+                p_ingr = ingr,
+                p_cat_id = catId,
+                p_image = recipeImage
             };
-
+            bool ok;
             if (recipeId == -1)
             {
-                if (DatabaseHelper.ExecuteNonQuery("AddRecipe", parameters))
-                {
-                    MessageBox.Show("Рецепт успешно добавлен.");
-                    this.Close();
-                }
+                ok = await DatabaseHelper.ExecuteNonQuery("add_recipe", rpcParams);
+                if (ok) MessageBox.Show("Рецепт успешно добавлен.");
             }
             else
             {
-                SqlParameter[] updateParameters = new SqlParameter[]
+                var updateParams = new
                 {
-            new SqlParameter("@RecipeID", recipeId),
-            new SqlParameter("@RecipeName", recipeName),
-            new SqlParameter("@Description", description),
-            new SqlParameter("@Ingredients", ingredients),
-            new SqlParameter("@CategoryID", categoryId),
-            new SqlParameter("@Image", recipeImage ?? (object)DBNull.Value)
+                    p_recipe_id = recipeId,
+                    p_name = name,
+                    p_desc = desc,
+                    p_ingr = ingr,
+                    p_cat_id = catId,
+                    p_image= recipeImage
                 };
-
-                if (DatabaseHelper.ExecuteNonQuery("UpdateRecipe", updateParameters))
-                {
-                    MessageBox.Show("Рецепт успешно обновлён.");
-                    this.Close();
-                }
+                ok = await DatabaseHelper.ExecuteNonQuery("update_recipe", updateParams);
+                if (ok) MessageBox.Show("Рецепт успешно обновлён.");
             }
+            if (ok) this.Close();
         }
         private bool TryLoadImageFromDialog() // попытка загрузки изображения через диалог
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog
-            {
+            using var openFileDialog = new OpenFileDialog {
                 Filter = "Image Files|*.jpg;*.jpeg;*.png;*.gif;*.bmp",
-                Title = "Выберите изображение"
+                Title  = "Выберите изображение"
             };
 
             if (openFileDialog.ShowDialog() == DialogResult.OK)
@@ -217,7 +198,6 @@ namespace ProjectDishes
         }
         private void pictureBoxRecipe_Click(object sender, EventArgs e)
         {
-            btnUploadImage_Click(sender, e);
         }
 
     }

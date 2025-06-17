@@ -29,108 +29,99 @@ namespace ProjectDishes
         /// </summary>
         private void InitializeComponent()
         {
-            this.btnAddToStorage = new System.Windows.Forms.Button();
-            this.btnOpenStorage = new System.Windows.Forms.Button();
-            this.btnCreateRecipe = new System.Windows.Forms.Button();
-            this.btnExit = new System.Windows.Forms.Button();
-            this.txtSearch = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.flowLayoutPanelRecipes = new System.Windows.Forms.FlowLayoutPanel();
-            this.SuspendLayout();
+            btnAddToStorage = new System.Windows.Forms.Button();
+            btnOpenStorage = new System.Windows.Forms.Button();
+            btnCreateRecipe = new System.Windows.Forms.Button();
+            btnExit = new System.Windows.Forms.Button();
+            txtSearch = new System.Windows.Forms.TextBox();
+            label1 = new System.Windows.Forms.Label();
+            flowLayoutPanelRecipes = new System.Windows.Forms.FlowLayoutPanel();
+            SuspendLayout();
             // 
             // btnAddToStorage
             // 
-            this.btnAddToStorage.Location = new System.Drawing.Point(437, 10);
-            this.btnAddToStorage.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.btnAddToStorage.Name = "btnAddToStorage";
-            this.btnAddToStorage.Size = new System.Drawing.Size(120, 33);
-            this.btnAddToStorage.TabIndex = 1;
-            this.btnAddToStorage.Text = "Сохранить";
-            this.btnAddToStorage.UseVisualStyleBackColor = true;
-            this.btnAddToStorage.Click += new System.EventHandler(this.btnAddToStorage_Click);
+            btnAddToStorage.Location = new System.Drawing.Point(583, 15);
+            btnAddToStorage.Name = "btnAddToStorage";
+            btnAddToStorage.Size = new System.Drawing.Size(160, 51);
+            btnAddToStorage.TabIndex = 1;
+            btnAddToStorage.Text = "Сохранить";
+            btnAddToStorage.UseVisualStyleBackColor = true;
+            btnAddToStorage.Click += btnAddToStorage_Click;
             // 
             // btnOpenStorage
             // 
-            this.btnOpenStorage.Location = new System.Drawing.Point(437, 48);
-            this.btnOpenStorage.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.btnOpenStorage.Name = "btnOpenStorage";
-            this.btnOpenStorage.Size = new System.Drawing.Size(120, 33);
-            this.btnOpenStorage.TabIndex = 2;
-            this.btnOpenStorage.Text = "Избранное";
-            this.btnOpenStorage.UseVisualStyleBackColor = true;
-            this.btnOpenStorage.Click += new System.EventHandler(this.btnOpenStorage_Click);
+            btnOpenStorage.Location = new System.Drawing.Point(583, 74);
+            btnOpenStorage.Name = "btnOpenStorage";
+            btnOpenStorage.Size = new System.Drawing.Size(160, 51);
+            btnOpenStorage.TabIndex = 2;
+            btnOpenStorage.Text = "Избранное";
+            btnOpenStorage.UseVisualStyleBackColor = true;
+            btnOpenStorage.Click += btnOpenStorage_Click;
             // 
             // btnCreateRecipe
             // 
-            this.btnCreateRecipe.Location = new System.Drawing.Point(437, 86);
-            this.btnCreateRecipe.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.btnCreateRecipe.Name = "btnCreateRecipe";
-            this.btnCreateRecipe.Size = new System.Drawing.Size(120, 33);
-            this.btnCreateRecipe.TabIndex = 3;
-            this.btnCreateRecipe.Text = "Создать";
-            this.btnCreateRecipe.UseVisualStyleBackColor = true;
-            this.btnCreateRecipe.Click += new System.EventHandler(this.btnCreateRecipe_Click);
+            btnCreateRecipe.Location = new System.Drawing.Point(583, 132);
+            btnCreateRecipe.Name = "btnCreateRecipe";
+            btnCreateRecipe.Size = new System.Drawing.Size(160, 51);
+            btnCreateRecipe.TabIndex = 3;
+            btnCreateRecipe.Text = "Создать";
+            btnCreateRecipe.UseVisualStyleBackColor = true;
+            btnCreateRecipe.Click += btnCreateRecipe_Click;
             // 
             // btnExit
             // 
-            this.btnExit.Location = new System.Drawing.Point(437, 328);
-            this.btnExit.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.btnExit.Name = "btnExit";
-            this.btnExit.Size = new System.Drawing.Size(120, 28);
-            this.btnExit.TabIndex = 6;
-            this.btnExit.Text = "Выйти";
-            this.btnExit.UseVisualStyleBackColor = true;
-            this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
+            btnExit.Location = new System.Drawing.Point(583, 505);
+            btnExit.Name = "btnExit";
+            btnExit.Size = new System.Drawing.Size(160, 43);
+            btnExit.TabIndex = 6;
+            btnExit.Text = "Выйти";
+            btnExit.UseVisualStyleBackColor = true;
+            btnExit.Click += btnExit_Click;
             // 
             // txtSearch
             // 
-            this.txtSearch.Location = new System.Drawing.Point(439, 159);
-            this.txtSearch.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.txtSearch.Name = "txtSearch";
-            this.txtSearch.Size = new System.Drawing.Size(120, 20);
-            this.txtSearch.TabIndex = 7;
-            this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
+            txtSearch.Location = new System.Drawing.Point(585, 245);
+            txtSearch.Name = "txtSearch";
+            txtSearch.Size = new System.Drawing.Size(159, 27);
+            txtSearch.TabIndex = 7;
+            txtSearch.TextChanged += txtSearch_TextChanged;
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(437, 143);
-            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(39, 13);
-            this.label1.TabIndex = 8;
-            this.label1.Text = "Поиск";
+            label1.AutoSize = true;
+            label1.Location = new System.Drawing.Point(583, 209);
+            label1.Name = "label1";
+            label1.Size = new System.Drawing.Size(52, 20);
+            label1.TabIndex = 8;
+            label1.Text = "Поиск";
             // 
             // flowLayoutPanelRecipes
             // 
-            this.flowLayoutPanelRecipes.AutoScroll = true;
-            this.flowLayoutPanelRecipes.Location = new System.Drawing.Point(9, 10);
-            this.flowLayoutPanelRecipes.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.flowLayoutPanelRecipes.Name = "flowLayoutPanelRecipes";
-            this.flowLayoutPanelRecipes.Size = new System.Drawing.Size(424, 346);
-            this.flowLayoutPanelRecipes.TabIndex = 9;
+            flowLayoutPanelRecipes.AutoScroll = true;
+            flowLayoutPanelRecipes.Location = new System.Drawing.Point(12, 15);
+            flowLayoutPanelRecipes.Name = "flowLayoutPanelRecipes";
+            flowLayoutPanelRecipes.Size = new System.Drawing.Size(565, 532);
+            flowLayoutPanelRecipes.TabIndex = 9;
             // 
             // UserForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.Lavender;
-            this.ClientSize = new System.Drawing.Size(564, 366);
-            this.Controls.Add(this.flowLayoutPanelRecipes);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.txtSearch);
-            this.Controls.Add(this.btnExit);
-            this.Controls.Add(this.btnCreateRecipe);
-            this.Controls.Add(this.btnOpenStorage);
-            this.Controls.Add(this.btnAddToStorage);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.Name = "UserForm";
-            this.Text = "Форма пользователя";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.UserForm_FormClosed);
-            this.Load += new System.EventHandler(this.UserForm_Load);
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+            AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            BackColor = System.Drawing.Color.Lavender;
+            ClientSize = new System.Drawing.Size(751, 563);
+            Controls.Add(flowLayoutPanelRecipes);
+            Controls.Add(label1);
+            Controls.Add(txtSearch);
+            Controls.Add(btnExit);
+            Controls.Add(btnCreateRecipe);
+            Controls.Add(btnOpenStorage);
+            Controls.Add(btnAddToStorage);
+            Name = "UserForm";
+            Text = "Форма пользователя";
+            FormClosed += UserForm_FormClosed;
+            Load += UserForm_Load;
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion

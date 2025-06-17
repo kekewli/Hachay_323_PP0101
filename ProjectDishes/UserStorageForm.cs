@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Data;
-using System.Data.SqlClient;
+using Npgsql;
 using System.Drawing;
 using System.IO;
-using System.Windows.Forms;
+using System.Threading.Tasks;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace ProjectDishes
 {
@@ -15,22 +16,17 @@ namespace ProjectDishes
         public UserStorageForm(int userId)
         {
             InitializeComponent();
-            AppStyle.ApplyStyle(this);
             this.userId = userId;
-            LoadUserRecipes();
             this.MaximizeBox = false;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
-
+            _=LoadUserRecipes();
+            AppStyle.ApplyStyle(this);
         }
-        private void LoadUserRecipes() //загрузка рецептов пользователей
+        private async Task LoadUserRecipes() //загрузка рецептов пользователей
         {
-            SqlParameter[] parameters = new SqlParameter[]
-            {
-                new SqlParameter("@UserID", userId)
-            };
-            DataTable userRecipes = DatabaseHelper.ExecuteQuery("GetUserRecipes", parameters);
+            var rpcParams = new { p_user = userId };
+            DataTable userRecipes = await DatabaseHelper.ExecuteQuery("get_user_recipes", rpcParams);
             flowLayoutPanelUserRecipes.Controls.Clear();
-
             foreach (DataRow row in userRecipes.Rows)
             {
                 Panel recipePanel = CreateRecipePanel(row);
@@ -43,7 +39,7 @@ namespace ProjectDishes
             {
                 Size = new Size(300, 100),
                 BorderStyle = BorderStyle.FixedSingle,
-                Tag = row["RecipeID"]
+                Tag = row["recipe_id"]
             };
             PictureBox pictureBox = new PictureBox
             {
@@ -51,20 +47,18 @@ namespace ProjectDishes
                 Location = new Point(10, 10),
                 SizeMode = PictureBoxSizeMode.Zoom
             };
-            if (row["Image"] != DBNull.Value)
+            if (row["image"] != DBNull.Value)
             {
-                byte[] imageData = (byte[])row["Image"];
-                using (MemoryStream ms = new MemoryStream(imageData))
-                {
-                    pictureBox.Image = Image.FromStream(ms);
-                }
+                byte[] imageData = (byte[])row["image"];
+                using MemoryStream ms = new MemoryStream(imageData);
+                pictureBox.Image = Image.FromStream(ms);
             }
             Label nameLabel = new Label
             {
-                Text = row["RecipeName"].ToString(),
+                Text = row["recipe_name"].ToString(),
                 Location = new Point(100, 10),
                 Size = new Size(200, 50),
-                Font = new Font("Arial", 10, FontStyle.Regular),
+                Font = new Font("Arial", 10),
                 AutoEllipsis = true
             };
             Button detailsButton = new Button
@@ -79,7 +73,7 @@ namespace ProjectDishes
             panel.Click += (sender, e) => SelectRecipePanel(panel);
             pictureBox.Click += (sender, e) => SelectRecipePanel(panel);
             nameLabel.Click += (sender, e) => SelectRecipePanel(panel);
-            detailsButton.Click += (sender, e) => OpenRecipeDetails((int)panel.Tag);
+            detailsButton.Click += (sender, e) => OpenRecipeDetails(Convert.ToInt32(panel.Tag));
             return panel;
         }
         private void OpenRecipeDetails(int recipeId) //открытие деталей
@@ -90,54 +84,54 @@ namespace ProjectDishes
         private void SelectRecipePanel(Panel panel) //выбор панели
         {
             foreach (Control control in flowLayoutPanelUserRecipes.Controls)
-            {
                 if (control is Panel otherPanel)
-                {
                     otherPanel.BackColor = SystemColors.Control;
-                }
-            }
             panel.BackColor = Color.LightBlue;
             selectedRecipeId = (int?)panel.Tag;
         }
-        private void btnDeleteRecipe_Click_1(object sender, EventArgs e) //удаление
+        private async void btnDeleteRecipe_Click_1(object sender, EventArgs e) //удаление
         {
             if (!selectedRecipeId.HasValue)
             {
                 MessageBox.Show("Пожалуйста, выберите рецепт для удаления.");
                 return;
             }
-            SqlParameter[] parameters = new SqlParameter[]
+
+            var rpcParams = new
             {
-        new SqlParameter("@UserID", userId),
-        new SqlParameter("@RecipeID", selectedRecipeId.Value)
+                p0 = userId,
+                p1 = selectedRecipeId.Value
             };
-            if (DatabaseHelper.ExecuteNonQuery("DeleteRecipeFromUserStorage", parameters))
+
+            if (await DatabaseHelper.ExecuteNonQuery("delete_recipe_from_user_storage", rpcParams)) // ← ИЗМЕНЕНО
             {
                 MessageBox.Show("Рецепт удален из избранного.");
-                LoadUserRecipes();
+                await LoadUserRecipes();
+            }
+            else
+            {
+                MessageBox.Show("Ошибка при удалении рецепта.");
             }
         }
-        private void txtSearch_TextChanged(object sender, EventArgs e) //поиск
+        private async void txtSearch_TextChanged(object sender, EventArgs e) //поиск
         {
             string keyword = txtSearch.Text.Trim();
-            SearchUserRecipes(keyword);
-        }
-        private void SearchUserRecipes(string keyword) //метод поиска
-        {
             if (string.IsNullOrWhiteSpace(keyword))
             {
-                LoadUserRecipes();
+                await LoadUserRecipes();
                 return;
             }
-
-            SqlParameter[] parameters = new SqlParameter[]
+            await SearchUserRecipes(keyword);
+        }
+        private async Task SearchUserRecipes(string keyword) //метод поиска
+        {
+            var rpcParams = new
             {
-                new SqlParameter("@UserID", userId),
-                new SqlParameter("@Keyword", keyword)
+                p0 = userId,
+                p1 = keyword
             };
-            DataTable results = DatabaseHelper.ExecuteQuery("SearchUserRecipes", parameters);
+            DataTable results = await DatabaseHelper.ExecuteQuery("search_user_recipes", rpcParams);
             flowLayoutPanelUserRecipes.Controls.Clear();
-
             foreach (DataRow row in results.Rows)
             {
                 Panel recipePanel = CreateRecipePanel(row);

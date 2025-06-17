@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Data;
-using System.Data.SqlClient;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ProjectDishes
@@ -13,36 +13,50 @@ namespace ProjectDishes
             InitializeComponent();
             AppStyle.ApplyStyle(this);
             this.userId = userId;
-            LoadCategories();
+            _ = LoadCategories();
             this.MaximizeBox = false;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
-            AppStyle.ApplyStyle(this);
         }
-        private void LoadCategories() //загрузка категорий
+        private async Task LoadCategories() //загрузка категорий
         {
-            DataTable categories = DatabaseHelper.ExecuteQuery("GetCategories");
+            DataTable categories = await DatabaseHelper.ExecuteQuery("get_categories");
             comboBoxCategory.DataSource = categories;
-            comboBoxCategory.DisplayMember = "CategoryName";
-            comboBoxCategory.ValueMember = "CategoryID";
+            comboBoxCategory.DisplayMember = "category_name";
+            comboBoxCategory.ValueMember = "category_id";
         }
-        private void btnSubmitRecipe_Click_1(object sender, EventArgs e) //подтверждение
+        private async void btnSubmitRecipe_Click_1(object sender, EventArgs e) //кнопка подтверждения
         {
-            string recipeName = txtRecipeName.Text;
-            string description = txtDescription.Text;
-            string ingredients = txtIngredients.Text;
-            int categoryId = (int)comboBoxCategory.SelectedValue;
-            SqlParameter[] parameters = new SqlParameter[]
+            string recipeName = txtRecipeName.Text.Trim();
+            string description = txtDescription.Text.Trim();
+            string ingredients = txtIngredients.Text.Trim();
+            int categoryId = Convert.ToInt32(comboBoxCategory.SelectedValue);
+            if (string.IsNullOrEmpty(recipeName) ||
+                string.IsNullOrEmpty(description) ||
+                string.IsNullOrEmpty(ingredients))
             {
-                new SqlParameter("@RecipeName", recipeName),
-                new SqlParameter("@Description", description),
-                new SqlParameter("@Ingredients", ingredients),
-                new SqlParameter("@CategoryID", categoryId),
-                new SqlParameter("@UserID", userId)
+                MessageBox.Show("Пожалуйста, заполните все поля.", "Ошибка",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            var rpcParams = new
+            {
+                p0 = userId,
+                p1 = recipeName,
+                p2 = description,
+                p3 = ingredients,
+                p4 = categoryId
             };
-            if (DatabaseHelper.ExecuteNonQuery("SubmitRecipeRequest", parameters))
+            bool success = await DatabaseHelper.ExecuteNonQuery("submit_user_recipe", rpcParams);
+            if (success)
             {
-                MessageBox.Show("Ваш рецепт отправлен на рассмотрение.");
+                MessageBox.Show("Ваш рецепт отправлен на рассмотрение.", "Успех",
+                                MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Close();
+            }
+            else
+            {
+                MessageBox.Show("Не удалось отправить рецепт. Попробуйте позже.", "Ошибка",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

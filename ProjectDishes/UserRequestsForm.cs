@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Data;
-using System.Data.SqlClient;
+using System.Threading.Tasks;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
@@ -10,71 +10,76 @@ namespace ProjectDishes
 {
     public partial class UserRequestsForm : Form
     {
+        private int? _selectedRequestId;
         public UserRequestsForm()
         {
             InitializeComponent();
-            AppStyle.ApplyStyle(this);
-            LoadUserRequests();
+            _ = LoadUserRequests();
             this.MaximizeBox = false;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
+            AppStyle.ApplyStyle(this);
         }
-        private void LoadUserRequests() //загрузка запросов 
+        private async Task LoadUserRequests() //загрузка запросов 
         {
-            DataTable userRequests = DatabaseHelper.ExecuteQuery("GetUserRecipeRequests");
+            DataTable userRequests = await DatabaseHelper.ExecuteQuery("get_user_recipe_requests");  // snake_case
             flowLayoutPanelRequests.Controls.Clear();
             foreach (DataRow row in userRequests.Rows)
             {
-                Panel requestPanel = CreateRequestPanel(row);
-                flowLayoutPanelRequests.Controls.Add(requestPanel);
+                Panel panel = CreateRequestPanel(row);
+                flowLayoutPanelRequests.Controls.Add(panel);
             }
         }
         private Panel CreateRequestPanel(DataRow row) //создание панелей
         {
-            Panel panel = new Panel
+            var panel = new Panel
             {
                 Size = new Size(300, 100),
                 BorderStyle = BorderStyle.FixedSingle,
-                Tag = row["RequestID"]
+                Tag = row["request_id"]  // snake_case
             };
-            PictureBox pictureBox = new PictureBox
+
+            var pictureBox = new PictureBox
             {
                 Size = new Size(80, 80),
                 Location = new Point(10, 10),
                 SizeMode = PictureBoxSizeMode.Zoom
             };
-            if (row["Image"] != DBNull.Value)
+            if (row["image"] != DBNull.Value)  // snake_case
             {
-                byte[] imageData = (byte[])row["Image"];
-                using (MemoryStream ms = new MemoryStream(imageData))
-                {
-                    pictureBox.Image = Image.FromStream(ms);
-                }
+                byte[] img = (byte[])row["image"];
+                using var ms = new MemoryStream(img);
+                pictureBox.Image = Image.FromStream(ms);
             }
-            Label nameLabel = new Label
+
+            var nameLabel = new Label
             {
-                Text = row["RecipeName"].ToString(),
+                Text = row["recipe_name"].ToString(),  // snake_case
                 Location = new Point(100, 10),
                 Size = new Size(200, 50),
-                Font = new Font("Arial", 10, FontStyle.Regular),
+                Font = new Font("Arial", 10),
                 AutoEllipsis = true
             };
-            Button viewButton = new Button
+
+            var viewButton = new Button
             {
                 Text = "Подробнее",
                 Location = new Point(100, 60),
                 Size = new Size(100, 30)
             };
+
             panel.Controls.Add(pictureBox);
             panel.Controls.Add(nameLabel);
             panel.Controls.Add(viewButton);
-            panel.Click += (sender, e) => SelectRecipePanel(panel);
-            pictureBox.Click += (sender, e) => SelectRecipePanel(panel);
-            nameLabel.Click += (sender, e) => SelectRecipePanel(panel);
-            viewButton.Click += (sender, e) => OpenRecipeDetails((int)panel.Tag);
+
+            panel.Click += (s, e) => SelectRequestPanel(panel);
+            pictureBox.Click += (s, e) => SelectRequestPanel(panel);
+            nameLabel.Click += (s, e) => SelectRequestPanel(panel);
+            viewButton.Click += (s, e) => OpenRequestDetails((int)panel.Tag);
 
             return panel;
         }
-        private void SelectRecipePanel(Panel panel) //выбор панелей
+
+        private void SelectRequestPanel(Panel panel) //выбор панелей
         {
             foreach (Control control in flowLayoutPanelRequests.Controls)
             {
@@ -83,89 +88,67 @@ namespace ProjectDishes
                     otherPanel.BackColor = SystemColors.Control;
                 }
             }
-            panel.BackColor = Color.LightBlue; 
+            panel.BackColor = Color.LightBlue;
+            _selectedRequestId = (int)panel.Tag;
         }
-        private void OpenRecipeDetails(int requestId) //открытие деталей
+        private async void OpenRequestDetails(int requestId) //открытие деталей
         {
-            RequestDetailsForm detailsForm = new RequestDetailsForm(requestId);
+            var detailsForm = new RequestDetailsForm(requestId);
             detailsForm.ShowDialog();
         }
-        private DataTable GetRequestDetails(int requestId) //метод открытия деталей
+        private async void btnApproveRecipe_Click(object sender, EventArgs e) //подтверждение
         {
-            SqlParameter[] parameters = new SqlParameter[]
+            if (_selectedRequestId == null)
             {
-                new SqlParameter("@RequestID", requestId)
-            };
-            return DatabaseHelper.ExecuteQuery("GetRequestDetailsById", parameters);
-        }
-        private void btnApproveRecipe_Click(object sender, EventArgs e) //подтверждение
-        {
-            Panel selectedPanel = flowLayoutPanelRequests.Controls
-                .OfType<Panel>()
-                .FirstOrDefault(p => p.BackColor == Color.LightBlue);
-            if (selectedPanel == null)
-            {
-                MessageBox.Show("Выберите запрос для утверждения.");
+                MessageBox.Show("Выберите запрос для утверждения.", "Ошибка",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            int requestId = (int)selectedPanel.Tag;
-            DataTable requestData = GetRequestDetails(requestId);
-            DataRow row = requestData.Rows[0];
-            string recipeName = row["RecipeName"].ToString();
-            string description = row["Description"].ToString();
-            string ingredients = row["Ingredients"].ToString();
-            int categoryId = Convert.ToInt32(row["CategoryID"]);
-            byte[] imageData = null;
-            if (row["Image"] != DBNull.Value)
+            //получение деталя самого запроса
+            var rpcParams = new { p0 = _selectedRequestId.Value };
+            DataTable dt = await DatabaseHelper.ExecuteQuery("get_request_details_by_id", rpcParams);
+            if (dt.Rows.Count == 0) return;
+            DataRow row = dt.Rows[0];
+            var rpcAdd = new
             {
-                imageData = (byte[])row["Image"]; 
-            }
-            SqlParameter[] parameters = new SqlParameter[]
-            {
-                new SqlParameter("@RecipeName", recipeName),
-                new SqlParameter("@Description", description),
-                new SqlParameter("@Ingredients", ingredients),
-                new SqlParameter("@CategoryID", categoryId),
-                new SqlParameter("@Image", imageData ?? (object)DBNull.Value)
+                p0 = row["recipe_name"].ToString(),
+                p1 = row["description"].ToString(),
+                p2 = row["ingredients"].ToString(),
+                p3 = Convert.ToInt32(row["category_id"]),
+                p4 = row["image"] is DBNull ? null : (byte[])row["image"]
             };
-            if (DatabaseHelper.ExecuteNonQuery("AddRecipe", parameters))
+            //добавление рецепта в основную таблицу
+            if (await DatabaseHelper.ExecuteNonQuery("add_recipe", rpcAdd))
             {
-                SqlParameter[] deleteParameters = new SqlParameter[]
-                {
-                    new SqlParameter("@RequestID", requestId)
-                };
-                DatabaseHelper.ExecuteNonQuery("DeleteUserRequest", deleteParameters);
-                MessageBox.Show("Запрос утвержден.");
-                LoadUserRequests(); 
-            }
-        }
-        private void btnDeleteRequest_Click(object sender, EventArgs e) //уаление
-        {
-            Panel selectedPanel = flowLayoutPanelRequests.Controls
-                .OfType<Panel>()
-                .FirstOrDefault(p => p.BackColor == Color.LightBlue);
+                var rpcDel = new { p0 = _selectedRequestId.Value };
+                await DatabaseHelper.ExecuteNonQuery("delete_user_request", rpcDel);
 
-            if (selectedPanel == null)
-            {
-                MessageBox.Show("Выберите запрос для удаления.");
-                return;
-            }
-
-            int requestId = (int)selectedPanel.Tag;
-
-            SqlParameter[] parameters = new SqlParameter[]
-            {
-                new SqlParameter("@RequestID", requestId)
-            };
-
-            if (DatabaseHelper.ExecuteNonQuery("DeleteUserRequest2", parameters))
-            {
-                MessageBox.Show("Запрос удален.");
-                LoadUserRequests();
+                MessageBox.Show("Запрос утверждён.", "Готово",
+                                MessageBoxButtons.OK, MessageBoxIcon.Information);
+                await LoadUserRequests();
             }
             else
             {
-                MessageBox.Show("Не удалось удалить запрос.");
+                MessageBox.Show("Не удалось добавить рецепт.", "Ошибка",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        private async void btnDeleteRequest_Click(object sender, EventArgs e) //уаление
+        {
+            if (_selectedRequestId == null)
+            {
+                MessageBox.Show("Выберите запрос для удаления.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            var rpcParams = new { p0 = _selectedRequestId.Value };
+            if (await DatabaseHelper.ExecuteNonQuery("delete_user_request2", rpcParams)) // snake_case
+            {
+                MessageBox.Show("Запрос удалён.", "Готово", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                await LoadUserRequests();
+            }
+            else
+            {
+                MessageBox.Show("Не удалось удалить запрос.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

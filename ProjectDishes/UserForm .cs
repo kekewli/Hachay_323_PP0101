@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Data;
-using System.Data.SqlClient;
 using System.Drawing;
 using System.IO;
-using System.Windows.Forms;
+using System.Threading.Tasks;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace ProjectDishes
 {
@@ -15,15 +15,15 @@ namespace ProjectDishes
         public UserForm(int userId)
         {
             InitializeComponent();
-            AppStyle.ApplyStyle(this);
             this.userId = userId;
-            LoadRecipes();
+            _ = LoadRecipes();
             this.MaximizeBox = false;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
+            AppStyle.ApplyStyle(this);
         }
-        private void LoadRecipes() //загрузка рецептов
+        private async Task LoadRecipes() //загрузка рецептов
         {
-            DataTable recipes = DatabaseHelper.ExecuteQuery("GetAllRecipes");
+            DataTable recipes = await DatabaseHelper.ExecuteQuery("get_all_recipes");
             flowLayoutPanelRecipes.Controls.Clear();
             foreach (DataRow row in recipes.Rows)
             {
@@ -31,37 +31,35 @@ namespace ProjectDishes
                 flowLayoutPanelRecipes.Controls.Add(recipePanel);
             }
         }
-        private Panel CreateRecipePanel(DataRow row) //создание панеелй
+        private Panel CreateRecipePanel(DataRow row) //создание панелей
         {
-            Panel panel = new Panel
+            var panel = new Panel
             {
                 Size = new Size(300, 100),
                 BorderStyle = BorderStyle.FixedSingle,
-                Tag = row["RecipeID"]
+                Tag = row["recipe_id"]
             };
-            PictureBox pictureBox = new PictureBox
+            var pictureBox = new PictureBox
             {
                 Size = new Size(80, 80),
                 Location = new Point(10, 10),
                 SizeMode = PictureBoxSizeMode.Zoom
             };
-            if (row["Image"] != DBNull.Value)
+            if (row["image"] != DBNull.Value)
             {
-                byte[] imageData = (byte[])row["Image"];
-                using (MemoryStream ms = new MemoryStream(imageData))
-                {
-                    pictureBox.Image = Image.FromStream(ms);
-                }
+                byte[] imageData = (byte[])row["image"];
+                using var ms = new MemoryStream(imageData);
+                pictureBox.Image = Image.FromStream(ms);
             }
-            Label nameLabel = new Label
+            var nameLabel = new Label
             {
-                Text = row["RecipeName"].ToString(),
+                Text = row["recipe_name"].ToString(),
                 Location = new Point(100, 10),
                 Size = new Size(200, 50),
                 Font = new Font("Arial", 10, FontStyle.Regular),
                 AutoEllipsis = true
             };
-            Button viewButton = new Button
+            var viewButton = new Button
             {
                 Text = "Подробнее",
                 Location = new Point(100, 60),
@@ -70,11 +68,10 @@ namespace ProjectDishes
             panel.Controls.Add(pictureBox);
             panel.Controls.Add(nameLabel);
             panel.Controls.Add(viewButton);
-            panel.Click += (sender, e) => SelectRecipePanel(panel);
-            pictureBox.Click += (sender, e) => SelectRecipePanel(panel);
-            nameLabel.Click += (sender, e) => SelectRecipePanel(panel);
-            viewButton.Click += (sender, e) => OpenRecipeDetails((int)panel.Tag);
-
+            panel.Click += (s, e) => SelectRecipePanel(panel);
+            pictureBox.Click += (s, e) => SelectRecipePanel(panel);
+            nameLabel.Click += (s, e) => SelectRecipePanel(panel);
+            viewButton.Click += (s, e) => OpenRecipeDetails(Convert.ToInt32(panel.Tag));
             return panel;
         }
         private void SelectRecipePanel(Panel panel) //выбор панелей
@@ -87,66 +84,57 @@ namespace ProjectDishes
                 }
             }
             panel.BackColor = Color.LightBlue;
-            selectedRecipeId = (int?)panel.Tag;
+            selectedRecipeId = Convert.ToInt32(panel.Tag);
+
         }
         private void OpenRecipeDetails(int recipeId) //открытие деталей рецепта
         {
-            RecipeDetailsForm detailsForm = new RecipeDetailsForm(recipeId);
+            var detailsForm = new RecipeDetailsForm(recipeId);
             detailsForm.ShowDialog();
         }
-        private void btnAddToStorage_Click(object sender, EventArgs e) //сохранение в избранное
+        private async void btnAddToStorage_Click(object sender, EventArgs e) //сохранение в избранное
         {
-            Panel selectedPanel = flowLayoutPanelRecipes.Controls
-                .OfType<Panel>()
-                .FirstOrDefault(p => p.BackColor == Color.LightBlue);
-            if (selectedPanel == null)
+            if (selectedRecipeId == null)
             {
-                MessageBox.Show("Выберите рецепт для добавления.");
+                MessageBox.Show("Выберите рецепт для добавления.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            int recipeId = (int)selectedPanel.Tag;
-            SqlParameter[] parameters = new SqlParameter[]
+            var rpcParams = new
             {
-                new SqlParameter("@UserID", userId),
-                new SqlParameter("@RecipeID", recipeId)
+                p_user = userId,
+                p_recipe = selectedRecipeId.Value
             };
-
-            if (DatabaseHelper.ExecuteNonQuery("AddRecipeToUserStorage", parameters))
-            {
-                MessageBox.Show("Рецепт добавлен в избранное.");
-            }
+            bool ok = await DatabaseHelper.ExecuteNonQuery("add_recipe_to_user_storage", rpcParams); // snake_case
+            if (ok)
+                MessageBox.Show("Рецепт добавлен в избранное.", "Готово", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            else
+                MessageBox.Show("Не удалось добавить рецепт.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
         private void btnOpenStorage_Click(object sender, EventArgs e) //открытие избранного
         {
-            UserStorageForm storageForm = new UserStorageForm(userId);
+            var storageForm = new UserStorageForm(userId);
             storageForm.ShowDialog();
         }
         private void btnCreateRecipe_Click(object sender, EventArgs e) //создание рецепта
         {
-            CreateRecipeForm createRecipeForm = new CreateRecipeForm(userId);
+            var createRecipeForm = new CreateRecipeForm(userId);
             createRecipeForm.ShowDialog();
         }
         private void btnExit_Click(object sender, EventArgs e)
         {
-            LoginForm loginForm = new LoginForm();
-            loginForm.Show();
+            new LoginForm().Show();
             this.Hide();
         }
-        private void txtSearch_TextChanged(object sender, EventArgs e) //поиск 
+        private async void txtSearch_TextChanged(object sender, EventArgs e) //поиск 
         {
             string keyword = txtSearch.Text.Trim();
-            SqlParameter[] parameters = new SqlParameter[]
-            {
-                new SqlParameter("@Keyword", keyword)
-            };
-
-            DataTable filteredRecipes = DatabaseHelper.ExecuteQuery("SearchRecipes", parameters);
+            var rpcParams = new { p0 = keyword };
+            DataTable filtered = await DatabaseHelper.ExecuteQuery("search_recipes", rpcParams);
             flowLayoutPanelRecipes.Controls.Clear();
-
-            foreach (DataRow row in filteredRecipes.Rows)
+            foreach (DataRow row in filtered.Rows)
             {
-                Panel recipePanel = CreateRecipePanel(row);
-                flowLayoutPanelRecipes.Controls.Add(recipePanel);
+                var panel = CreateRecipePanel(row);
+                flowLayoutPanelRecipes.Controls.Add(panel);
             }
         }
         private void UserForm_Load(object sender, EventArgs e)

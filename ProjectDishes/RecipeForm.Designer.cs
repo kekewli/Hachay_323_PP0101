@@ -29,157 +29,156 @@ namespace ProjectDishes
         /// </summary>
         private void InitializeComponent()
         {
-            this.txtRecipeName = new System.Windows.Forms.TextBox();
-            this.txtDescription = new System.Windows.Forms.TextBox();
-            this.txtIngredients = new System.Windows.Forms.TextBox();
-            this.comboBoxCategory = new System.Windows.Forms.ComboBox();
-            this.btnSave = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.btnUploadImage = new System.Windows.Forms.Button();
-            this.pictureBoxRecipe = new System.Windows.Forms.PictureBox();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxRecipe)).BeginInit();
-            this.SuspendLayout();
+            txtRecipeName = new System.Windows.Forms.TextBox();
+            txtDescription = new System.Windows.Forms.TextBox();
+            txtIngredients = new System.Windows.Forms.TextBox();
+            comboBoxCategory = new System.Windows.Forms.ComboBox();
+            btnSave = new System.Windows.Forms.Button();
+            label1 = new System.Windows.Forms.Label();
+            label2 = new System.Windows.Forms.Label();
+            label3 = new System.Windows.Forms.Label();
+            label4 = new System.Windows.Forms.Label();
+            btnUploadImage = new System.Windows.Forms.Button();
+            pictureBoxRecipe = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)pictureBoxRecipe).BeginInit();
+            SuspendLayout();
             // 
             // txtRecipeName
             // 
-            this.txtRecipeName.Location = new System.Drawing.Point(13, 194);
-            this.txtRecipeName.Margin = new System.Windows.Forms.Padding(4);
-            this.txtRecipeName.Name = "txtRecipeName";
-            this.txtRecipeName.Size = new System.Drawing.Size(369, 28);
-            this.txtRecipeName.TabIndex = 0;
+            txtRecipeName.Location = new System.Drawing.Point(13, 197);
+            txtRecipeName.Margin = new System.Windows.Forms.Padding(4);
+            txtRecipeName.Name = "txtRecipeName";
+            txtRecipeName.Size = new System.Drawing.Size(369, 28);
+            txtRecipeName.TabIndex = 0;
             // 
             // txtDescription
             // 
-            this.txtDescription.Location = new System.Drawing.Point(13, 267);
-            this.txtDescription.Margin = new System.Windows.Forms.Padding(4);
-            this.txtDescription.Name = "txtDescription";
-            this.txtDescription.Size = new System.Drawing.Size(369, 28);
-            this.txtDescription.TabIndex = 1;
+            txtDescription.Location = new System.Drawing.Point(13, 271);
+            txtDescription.Margin = new System.Windows.Forms.Padding(4);
+            txtDescription.Name = "txtDescription";
+            txtDescription.Size = new System.Drawing.Size(369, 28);
+            txtDescription.TabIndex = 1;
             // 
             // txtIngredients
             // 
-            this.txtIngredients.Location = new System.Drawing.Point(13, 338);
-            this.txtIngredients.Margin = new System.Windows.Forms.Padding(4);
-            this.txtIngredients.Name = "txtIngredients";
-            this.txtIngredients.Size = new System.Drawing.Size(369, 28);
-            this.txtIngredients.TabIndex = 2;
+            txtIngredients.Location = new System.Drawing.Point(13, 341);
+            txtIngredients.Margin = new System.Windows.Forms.Padding(4);
+            txtIngredients.Name = "txtIngredients";
+            txtIngredients.Size = new System.Drawing.Size(369, 28);
+            txtIngredients.TabIndex = 2;
             // 
             // comboBoxCategory
             // 
-            this.comboBoxCategory.FormattingEnabled = true;
-            this.comboBoxCategory.Location = new System.Drawing.Point(13, 410);
-            this.comboBoxCategory.Margin = new System.Windows.Forms.Padding(4);
-            this.comboBoxCategory.Name = "comboBoxCategory";
-            this.comboBoxCategory.Size = new System.Drawing.Size(369, 30);
-            this.comboBoxCategory.TabIndex = 3;
+            comboBoxCategory.FormattingEnabled = true;
+            comboBoxCategory.Location = new System.Drawing.Point(13, 413);
+            comboBoxCategory.Margin = new System.Windows.Forms.Padding(4);
+            comboBoxCategory.Name = "comboBoxCategory";
+            comboBoxCategory.Size = new System.Drawing.Size(369, 30);
+            comboBoxCategory.TabIndex = 3;
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(13, 462);
-            this.btnSave.Margin = new System.Windows.Forms.Padding(4);
-            this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(370, 55);
-            this.btnSave.TabIndex = 4;
-            this.btnSave.Text = "Добавить";
-            this.btnSave.UseVisualStyleBackColor = true;
-            this.btnSave.Click += new System.EventHandler(this.btnSave_Click_1);
+            btnSave.Location = new System.Drawing.Point(13, 465);
+            btnSave.Margin = new System.Windows.Forms.Padding(4);
+            btnSave.Name = "btnSave";
+            btnSave.Size = new System.Drawing.Size(370, 55);
+            btnSave.TabIndex = 4;
+            btnSave.Text = "Добавить";
+            btnSave.UseVisualStyleBackColor = true;
+            btnSave.Click += btnSave_Click_1;
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.label1.Location = new System.Drawing.Point(11, 166);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(159, 24);
-            this.label1.TabIndex = 5;
-            this.label1.Text = "Название блюда";
+            label1.AutoSize = true;
+            label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 204);
+            label1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            label1.Location = new System.Drawing.Point(11, 166);
+            label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            label1.Name = "label1";
+            label1.Size = new System.Drawing.Size(151, 22);
+            label1.TabIndex = 5;
+            label1.Text = "Название блюда";
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label2.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.label2.Location = new System.Drawing.Point(11, 239);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(100, 24);
-            this.label2.TabIndex = 6;
-            this.label2.Text = "Описание";
+            label2.AutoSize = true;
+            label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 204);
+            label2.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            label2.Location = new System.Drawing.Point(11, 238);
+            label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            label2.Name = "label2";
+            label2.Size = new System.Drawing.Size(93, 22);
+            label2.TabIndex = 6;
+            label2.Text = "Описание";
             // 
             // label3
             // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label3.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.label3.Location = new System.Drawing.Point(11, 311);
-            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(133, 24);
-            this.label3.TabIndex = 7;
-            this.label3.Text = "Ингридиенты";
+            label3.AutoSize = true;
+            label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 204);
+            label3.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            label3.Location = new System.Drawing.Point(11, 311);
+            label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            label3.Name = "label3";
+            label3.Size = new System.Drawing.Size(122, 22);
+            label3.TabIndex = 7;
+            label3.Text = "Ингридиенты";
             // 
             // label4
             // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label4.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.label4.Location = new System.Drawing.Point(11, 382);
-            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(105, 24);
-            this.label4.TabIndex = 8;
-            this.label4.Text = "Категория";
+            label4.AutoSize = true;
+            label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 204);
+            label4.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            label4.Location = new System.Drawing.Point(11, 381);
+            label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            label4.Name = "label4";
+            label4.Size = new System.Drawing.Size(97, 22);
+            label4.TabIndex = 8;
+            label4.Text = "Категория";
             // 
             // btnUploadImage
             // 
-            this.btnUploadImage.Location = new System.Drawing.Point(233, 12);
-            this.btnUploadImage.Name = "btnUploadImage";
-            this.btnUploadImage.Size = new System.Drawing.Size(155, 33);
-            this.btnUploadImage.TabIndex = 22;
-            this.btnUploadImage.Text = "Выбрать";
-            this.btnUploadImage.UseVisualStyleBackColor = true;
-            this.btnUploadImage.Click += new System.EventHandler(this.btnUploadImage_Click);
+            btnUploadImage.Location = new System.Drawing.Point(233, 12);
+            btnUploadImage.Name = "btnUploadImage";
+            btnUploadImage.Size = new System.Drawing.Size(155, 33);
+            btnUploadImage.TabIndex = 22;
+            btnUploadImage.Text = "Выбрать";
+            btnUploadImage.UseVisualStyleBackColor = true;
+            btnUploadImage.Click += btnUploadImage_Click;
             // 
             // pictureBoxRecipe
             // 
-            this.pictureBoxRecipe.Location = new System.Drawing.Point(15, 12);
-            this.pictureBoxRecipe.Name = "pictureBoxRecipe";
-            this.pictureBoxRecipe.Size = new System.Drawing.Size(207, 144);
-            this.pictureBoxRecipe.TabIndex = 21;
-            this.pictureBoxRecipe.TabStop = false;
-            this.pictureBoxRecipe.Click += new System.EventHandler(this.pictureBoxRecipe_Click);
+            pictureBoxRecipe.Location = new System.Drawing.Point(15, 12);
+            pictureBoxRecipe.Name = "pictureBoxRecipe";
+            pictureBoxRecipe.Size = new System.Drawing.Size(212, 151);
+            pictureBoxRecipe.TabIndex = 21;
+            pictureBoxRecipe.TabStop = false;
+            pictureBoxRecipe.Click += pictureBoxRecipe_Click;
             // 
             // RecipeForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 22F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.Lavender;
-            this.ClientSize = new System.Drawing.Size(400, 523);
-            this.Controls.Add(this.btnUploadImage);
-            this.Controls.Add(this.pictureBoxRecipe);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.btnSave);
-            this.Controls.Add(this.comboBoxCategory);
-            this.Controls.Add(this.txtIngredients);
-            this.Controls.Add(this.txtDescription);
-            this.Controls.Add(this.txtRecipeName);
-            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.Margin = new System.Windows.Forms.Padding(4);
-            this.Name = "RecipeForm";
-            this.Text = "Создание";
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxRecipe)).EndInit();
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+            AutoScaleDimensions = new System.Drawing.SizeF(10F, 22F);
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            BackColor = System.Drawing.Color.Lavender;
+            ClientSize = new System.Drawing.Size(400, 533);
+            Controls.Add(btnUploadImage);
+            Controls.Add(pictureBoxRecipe);
+            Controls.Add(label4);
+            Controls.Add(label3);
+            Controls.Add(label2);
+            Controls.Add(label1);
+            Controls.Add(btnSave);
+            Controls.Add(comboBoxCategory);
+            Controls.Add(txtIngredients);
+            Controls.Add(txtDescription);
+            Controls.Add(txtRecipeName);
+            Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 204);
+            ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            Margin = new System.Windows.Forms.Padding(4);
+            Name = "RecipeForm";
+            Text = "Создание";
+            ((System.ComponentModel.ISupportInitialize)pictureBoxRecipe).EndInit();
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion

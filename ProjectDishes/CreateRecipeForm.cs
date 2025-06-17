@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Data;
-using System.Data.SqlClient;
 using System.Drawing;
 using System.IO;
-using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Media;
+using Newtonsoft.Json;
 
 namespace ProjectDishes
 {
@@ -17,18 +18,17 @@ namespace ProjectDishes
             InitializeComponent();
             AppStyle.ApplyStyle(this);
             this.userId = userId;
-            LoadCategories();
-            AppStyle.ApplyStyle(this);
+            _ = LoadCategories();
             pictureBoxRecipe.AllowDrop = true;
             pictureBoxRecipe.DragEnter += PictureBoxRecipe_DragEnter;
             pictureBoxRecipe.DragDrop += PictureBoxRecipe_DragDrop;
         }
-        private void LoadCategories() //категории
+        private async Task LoadCategories() //категории
         {
-            DataTable categories = DatabaseHelper.ExecuteQuery("GetCategories");
+            DataTable categories = await DatabaseHelper.ExecuteQuery("get_categories");
             cmbCategory.DataSource = categories;
-            cmbCategory.DisplayMember = "CategoryName";
-            cmbCategory.ValueMember = "CategoryID";
+            cmbCategory.DisplayMember = "category_name";
+            cmbCategory.ValueMember = "category_id";
         }
         private void PictureBoxRecipe_DragEnter(object sender, DragEventArgs e)
         {
@@ -42,10 +42,9 @@ namespace ProjectDishes
             string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
             if (files.Length > 0)
             {
-                string imagePath = files[0];
                 try
                 {
-                    DisplayImage(imagePath);  
+                    DisplayImage(files[0]);
                 }
                 catch (Exception ex)
                 {
@@ -53,107 +52,77 @@ namespace ProjectDishes
                 }
             }
         }
-        private void btnUploadImage_Click(object sender, EventArgs e) //загрузка изоб.
+        private void PickImageFromDialog()
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog
+            using var open = new OpenFileDialog
             {
-                Filter = "Image Files|*.jpg;*.jpeg;*.png;*.gif;*.bmp"
+                Filter = "Image Files|*.jpg;*.jpeg;*.png;*.gif;*.bmp",
+                Title = "Выберите изображение"
             };
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                DisplayImage(openFileDialog.FileName);
-            }
+            if (open.ShowDialog() == DialogResult.OK)
+                DisplayImage(open.FileName);
         }
         private void DisplayImage(string filePath)
         {
             try
             {
-                Image image = Image.FromFile(filePath);
-                pictureBoxRecipe.Image = image;
-                pictureBoxRecipe.SizeMode = PictureBoxSizeMode.Zoom;  
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    image.Save(ms, image.RawFormat);
-                    recipeImage = ms.ToArray();
-                }
+                var img = Image.FromFile(filePath);
+                pictureBoxRecipe.Image = img;
+                pictureBoxRecipe.SizeMode = PictureBoxSizeMode.Zoom;
+                using var ms = new MemoryStream();
+                img.Save(ms, img.RawFormat);
+                recipeImage = ms.ToArray();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Ошибка при загрузке изображения: " + ex.Message);
+                MessageBox.Show($"Ошибка при загрузке изображения: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        private void btnSubmit_Click(object sender, EventArgs e) //подтверждение
+        private async void btnSubmit_Click(object sender, EventArgs e) //подтверждение
         {
             string recipeName = txtRecipeName.Text.Trim();
             string description = txtDescription.Text.Trim();
             string ingredients = txtIngredients.Text.Trim();
             int categoryId = Convert.ToInt32(cmbCategory.SelectedValue);
-
-            if (string.IsNullOrEmpty(recipeName) || string.IsNullOrEmpty(description) || string.IsNullOrEmpty(ingredients))
+            if (string.IsNullOrEmpty(recipeName) ||
+                string.IsNullOrEmpty(description) ||
+                string.IsNullOrEmpty(ingredients))
             {
-                MessageBox.Show("Пожалуйста, заполните все поля.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Пожалуйста, заполните все поля.", "Ошибка",MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             if (recipeImage == null)
             {
-                DialogResult result = MessageBox.Show(
-                    "Вы не добавили изображение. Загрузить сейчас?",
-                    "Изображение отсутствует",
-                    MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Warning);
-
-                if (result == DialogResult.Yes)
+                var res = MessageBox.Show("Вы не добавили изображение! Загрузить сейчас?","Изображение отсутствует", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                if (res == DialogResult.Yes)
                 {
-                    OpenFileDialog openFileDialog = new OpenFileDialog
-                    {
-                        Filter = "Image Files|*.jpg;*.jpeg;*.png;*.gif;*.bmp",
-                        Title = "Выберите изображение"
-                    };
-
-                    if (openFileDialog.ShowDialog() == DialogResult.OK)
-                    {
-                        try
-                        {
-                            DisplayImage(openFileDialog.FileName);
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show($"Ошибка загрузки изображения: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            return;
-                        }
-                    }
-                    else
-                    {
-                        MessageBox.Show("Вы отменили выбор изображения. Рецепт не будет сохранен без изображения.", "Отмена", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        return;
-                    }
+                    PickImageFromDialog();
+                    if (recipeImage == null) return;
                 }
                 else
                 {
-                    MessageBox.Show("Рецепт не может быть сохранён без изображения.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(
+                        "Рецепт не может быть сохранён без изображения.",
+                        "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
             }
-
-            // Готовим параметры для сохранения
-            SqlParameter[] parameters = new SqlParameter[]
+            var rpcParams = new
             {
-        new SqlParameter("@UserID", userId),
-        new SqlParameter("@RecipeName", recipeName),
-        new SqlParameter("@Description", description),
-        new SqlParameter("@Ingredients", ingredients),
-        new SqlParameter("@CategoryID", categoryId),
-        new SqlParameter("@Image", recipeImage ?? (object)DBNull.Value)
+                p_user = userId,
+                p_name = recipeName,
+                p_desc = description,
+                p_ingr = ingredients,
+                p_cat_id = categoryId,
+                p_image = recipeImage
             };
-
-            // Сохраняем данные в базу
-            if (DatabaseHelper.ExecuteNonQuery("SubmitUserRecipe", parameters))
+            bool success = await DatabaseHelper.ExecuteNonQuery("submit_user_recipe", rpcParams);
+            if (success)
             {
                 MessageBox.Show("Рецепт отправлен на рассмотрение.");
                 this.Close();
             }
         }
-
         private void CreateRecipeForm_Load(object sender, EventArgs e)
         {
             pictureBoxRecipe.Image = null;
@@ -161,19 +130,11 @@ namespace ProjectDishes
         }
         private void pictureBoxRecipe_Click(object sender, EventArgs e)
         {
-
+            PickImageFromDialog();
         }
         private void btnUploadImage_Click_1(object sender, EventArgs e) //открытие проводника
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog
-            {
-                Filter = "Image Files|*.jpg;*.jpeg;*.png;*.gif;*.bmp",  
-                Title = "Выберите изображение" 
-            };
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                DisplayImage(openFileDialog.FileName);
-            }
+            PickImageFromDialog();
         }
     }
 }

@@ -29,153 +29,152 @@ namespace ProjectDishes
         /// </summary>
         private void InitializeComponent()
         {
-            this.label4 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.btnSubmit = new System.Windows.Forms.Button();
-            this.cmbCategory = new System.Windows.Forms.ComboBox();
-            this.txtIngredients = new System.Windows.Forms.TextBox();
-            this.txtDescription = new System.Windows.Forms.TextBox();
-            this.txtRecipeName = new System.Windows.Forms.TextBox();
-            this.pictureBoxRecipe = new System.Windows.Forms.PictureBox();
-            this.btnUploadImage = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxRecipe)).BeginInit();
-            this.SuspendLayout();
+            label4 = new System.Windows.Forms.Label();
+            label3 = new System.Windows.Forms.Label();
+            label2 = new System.Windows.Forms.Label();
+            label1 = new System.Windows.Forms.Label();
+            btnSubmit = new System.Windows.Forms.Button();
+            cmbCategory = new System.Windows.Forms.ComboBox();
+            txtIngredients = new System.Windows.Forms.TextBox();
+            txtDescription = new System.Windows.Forms.TextBox();
+            txtRecipeName = new System.Windows.Forms.TextBox();
+            pictureBoxRecipe = new System.Windows.Forms.PictureBox();
+            btnUploadImage = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)pictureBoxRecipe).BeginInit();
+            SuspendLayout();
             // 
             // label4
             // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label4.Location = new System.Drawing.Point(11, 376);
-            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(105, 24);
-            this.label4.TabIndex = 18;
-            this.label4.Text = "Категория";
+            label4.AutoSize = true;
+            label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 204);
+            label4.Location = new System.Drawing.Point(11, 463);
+            label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            label4.Name = "label4";
+            label4.Size = new System.Drawing.Size(97, 22);
+            label4.TabIndex = 18;
+            label4.Text = "Категория";
             // 
             // label3
             // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label3.Location = new System.Drawing.Point(11, 303);
-            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(133, 24);
-            this.label3.TabIndex = 17;
-            this.label3.Text = "Ингридиенты";
+            label3.AutoSize = true;
+            label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 204);
+            label3.Location = new System.Drawing.Point(11, 371);
+            label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            label3.Name = "label3";
+            label3.Size = new System.Drawing.Size(122, 22);
+            label3.TabIndex = 17;
+            label3.Text = "Ингридиенты";
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label2.Location = new System.Drawing.Point(11, 231);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(100, 24);
-            this.label2.TabIndex = 16;
-            this.label2.Text = "Описание";
+            label2.AutoSize = true;
+            label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 204);
+            label2.Location = new System.Drawing.Point(11, 272);
+            label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            label2.Name = "label2";
+            label2.Size = new System.Drawing.Size(93, 22);
+            label2.TabIndex = 16;
+            label2.Text = "Описание";
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label1.Location = new System.Drawing.Point(11, 159);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(159, 24);
-            this.label1.TabIndex = 15;
-            this.label1.Text = "Название блюда";
+            label1.AutoSize = true;
+            label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 204);
+            label1.Location = new System.Drawing.Point(11, 177);
+            label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            label1.Name = "label1";
+            label1.Size = new System.Drawing.Size(151, 22);
+            label1.TabIndex = 15;
+            label1.Text = "Название блюда";
             // 
             // btnSubmit
             // 
-            this.btnSubmit.Location = new System.Drawing.Point(13, 455);
-            this.btnSubmit.Margin = new System.Windows.Forms.Padding(4);
-            this.btnSubmit.Name = "btnSubmit";
-            this.btnSubmit.Size = new System.Drawing.Size(370, 55);
-            this.btnSubmit.TabIndex = 14;
-            this.btnSubmit.Text = "Создать";
-            this.btnSubmit.UseVisualStyleBackColor = true;
-            this.btnSubmit.Click += new System.EventHandler(this.btnSubmit_Click);
+            btnSubmit.Location = new System.Drawing.Point(13, 537);
+            btnSubmit.Margin = new System.Windows.Forms.Padding(4);
+            btnSubmit.Name = "btnSubmit";
+            btnSubmit.Size = new System.Drawing.Size(375, 55);
+            btnSubmit.TabIndex = 14;
+            btnSubmit.Text = "Создать";
+            btnSubmit.UseVisualStyleBackColor = true;
+            btnSubmit.Click += btnSubmit_Click;
             // 
             // cmbCategory
             // 
-            this.cmbCategory.FormattingEnabled = true;
-            this.cmbCategory.Location = new System.Drawing.Point(13, 403);
-            this.cmbCategory.Margin = new System.Windows.Forms.Padding(4);
-            this.cmbCategory.Name = "cmbCategory";
-            this.cmbCategory.Size = new System.Drawing.Size(369, 30);
-            this.cmbCategory.TabIndex = 13;
+            cmbCategory.FormattingEnabled = true;
+            cmbCategory.Location = new System.Drawing.Point(11, 499);
+            cmbCategory.Margin = new System.Windows.Forms.Padding(4);
+            cmbCategory.Name = "cmbCategory";
+            cmbCategory.Size = new System.Drawing.Size(377, 30);
+            cmbCategory.TabIndex = 13;
             // 
             // txtIngredients
             // 
-            this.txtIngredients.Location = new System.Drawing.Point(13, 331);
-            this.txtIngredients.Margin = new System.Windows.Forms.Padding(4);
-            this.txtIngredients.Name = "txtIngredients";
-            this.txtIngredients.Size = new System.Drawing.Size(369, 28);
-            this.txtIngredients.TabIndex = 12;
+            txtIngredients.Location = new System.Drawing.Point(11, 409);
+            txtIngredients.Margin = new System.Windows.Forms.Padding(4);
+            txtIngredients.Name = "txtIngredients";
+            txtIngredients.Size = new System.Drawing.Size(369, 28);
+            txtIngredients.TabIndex = 12;
             // 
             // txtDescription
             // 
-            this.txtDescription.Location = new System.Drawing.Point(13, 260);
-            this.txtDescription.Margin = new System.Windows.Forms.Padding(4);
-            this.txtDescription.Name = "txtDescription";
-            this.txtDescription.Size = new System.Drawing.Size(369, 28);
-            this.txtDescription.TabIndex = 11;
+            txtDescription.Location = new System.Drawing.Point(11, 319);
+            txtDescription.Margin = new System.Windows.Forms.Padding(4);
+            txtDescription.Name = "txtDescription";
+            txtDescription.Size = new System.Drawing.Size(369, 28);
+            txtDescription.TabIndex = 11;
             // 
             // txtRecipeName
             // 
-            this.txtRecipeName.Location = new System.Drawing.Point(13, 187);
-            this.txtRecipeName.Margin = new System.Windows.Forms.Padding(4);
-            this.txtRecipeName.Name = "txtRecipeName";
-            this.txtRecipeName.Size = new System.Drawing.Size(369, 28);
-            this.txtRecipeName.TabIndex = 10;
+            txtRecipeName.Location = new System.Drawing.Point(11, 216);
+            txtRecipeName.Margin = new System.Windows.Forms.Padding(4);
+            txtRecipeName.Name = "txtRecipeName";
+            txtRecipeName.Size = new System.Drawing.Size(369, 28);
+            txtRecipeName.TabIndex = 10;
             // 
             // pictureBoxRecipe
             // 
-            this.pictureBoxRecipe.Location = new System.Drawing.Point(15, 12);
-            this.pictureBoxRecipe.Name = "pictureBoxRecipe";
-            this.pictureBoxRecipe.Size = new System.Drawing.Size(207, 144);
-            this.pictureBoxRecipe.TabIndex = 19;
-            this.pictureBoxRecipe.TabStop = false;
-            this.pictureBoxRecipe.Click += new System.EventHandler(this.pictureBoxRecipe_Click);
+            pictureBoxRecipe.Location = new System.Drawing.Point(15, 12);
+            pictureBoxRecipe.Name = "pictureBoxRecipe";
+            pictureBoxRecipe.Size = new System.Drawing.Size(207, 144);
+            pictureBoxRecipe.TabIndex = 19;
+            pictureBoxRecipe.TabStop = false;
+            pictureBoxRecipe.Click += pictureBoxRecipe_Click;
             // 
             // btnUploadImage
             // 
-            this.btnUploadImage.Location = new System.Drawing.Point(233, 12);
-            this.btnUploadImage.Name = "btnUploadImage";
-            this.btnUploadImage.Size = new System.Drawing.Size(155, 33);
-            this.btnUploadImage.TabIndex = 20;
-            this.btnUploadImage.Text = "Выбрать";
-            this.btnUploadImage.UseVisualStyleBackColor = true;
-            this.btnUploadImage.Click += new System.EventHandler(this.btnUploadImage_Click_1);
+            btnUploadImage.Location = new System.Drawing.Point(233, 12);
+            btnUploadImage.Name = "btnUploadImage";
+            btnUploadImage.Size = new System.Drawing.Size(155, 33);
+            btnUploadImage.TabIndex = 20;
+            btnUploadImage.Text = "Выбрать";
+            btnUploadImage.UseVisualStyleBackColor = true;
+            btnUploadImage.Click += btnUploadImage_Click_1;
             // 
             // CreateRecipeForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 22F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.Lavender;
-            this.ClientSize = new System.Drawing.Size(400, 523);
-            this.Controls.Add(this.btnUploadImage);
-            this.Controls.Add(this.pictureBoxRecipe);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.btnSubmit);
-            this.Controls.Add(this.cmbCategory);
-            this.Controls.Add(this.txtIngredients);
-            this.Controls.Add(this.txtDescription);
-            this.Controls.Add(this.txtRecipeName);
-            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Margin = new System.Windows.Forms.Padding(4);
-            this.Name = "CreateRecipeForm";
-            this.Text = "Создание рецепта";
-            this.Load += new System.EventHandler(this.CreateRecipeForm_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxRecipe)).EndInit();
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+            AutoScaleDimensions = new System.Drawing.SizeF(10F, 22F);
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            BackColor = System.Drawing.Color.Lavender;
+            ClientSize = new System.Drawing.Size(397, 605);
+            Controls.Add(btnUploadImage);
+            Controls.Add(pictureBoxRecipe);
+            Controls.Add(label4);
+            Controls.Add(label3);
+            Controls.Add(label2);
+            Controls.Add(label1);
+            Controls.Add(btnSubmit);
+            Controls.Add(cmbCategory);
+            Controls.Add(txtIngredients);
+            Controls.Add(txtDescription);
+            Controls.Add(txtRecipeName);
+            Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 204);
+            Margin = new System.Windows.Forms.Padding(4);
+            Name = "CreateRecipeForm";
+            Text = "Создание рецепта";
+            Load += CreateRecipeForm_Load;
+            ((System.ComponentModel.ISupportInitialize)pictureBoxRecipe).EndInit();
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion

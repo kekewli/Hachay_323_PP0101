@@ -1,80 +1,73 @@
 ﻿using System;
-using System.Data;
-using System.Data.SqlClient;
 using System.Windows.Forms;
+using Supabase;
+using Supabase.Gotrue;  
+using Supabase.Postgrest;
+using Supabase.Storage;   
+using Newtonsoft.Json;
+using System.Data;
+using System.Threading.Tasks;
 
 namespace ProjectDishes
 {
     public static class DatabaseHelper
     {
-        static public string connectionString = "Data Source=NOTBK;Initial Catalog=Dishes;Integrated Security=True";
-        public static bool ExecuteNonQuery(string storedProcedureName, SqlParameter[] parameters)
+        private const string SupabaseUrl = "https://mrwucqzxbhmxsyfgqgwn.supabase.co";
+        private const string SupabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1yd3VjcXp4YmhteHN5ZmdxZ3duIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk3MzA3MjgsImV4cCI6MjA2NTMwNjcyOH0.JR9e-Q3GH7QjI3DSOTAyR-Y9QeWJ5Dj71wWBvBoVWKw";
+
+        private static readonly Supabase.Client Client;
+
+        static DatabaseHelper()
+        {
+            Client = new Supabase.Client(SupabaseUrl, SupabaseKey);
+            Client.InitializeAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+        }
+
+        public static async Task<bool> ExecuteNonQuery(string functionName, object parameters = null)
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(connectionString))
-                {
-                    connection.Open();
-                    using (SqlCommand command = new SqlCommand(storedProcedureName, connection))
-                    {
-                        command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.AddRange(parameters);
-                        command.ExecuteNonQuery();
-                    }
-                }
+                await Client.Rpc<dynamic>(functionName, parameters);
                 return true;
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "DatabaseHelper.ExecuteNonQuery", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
         }
-        public static DataTable ExecuteQuery(string storedProcedureName, SqlParameter[] parameters = null)
+        public static async Task<DataTable> ExecuteQuery(string functionName, object parameters = null)
         {
-            DataTable dataTable = new DataTable();
+            var dt = new DataTable();
             try
             {
-                using (SqlConnection connection = new SqlConnection(connectionString))
-                {
-                    connection.Open();
-                    using (SqlCommand command = new SqlCommand(storedProcedureName, connection))
-                    {
-                        command.CommandType = CommandType.StoredProcedure;
-                        if (parameters != null)
-                        {
-                            command.Parameters.AddRange(parameters);
-                        }
-
-                        using (SqlDataAdapter adapter = new SqlDataAdapter(command))
-                        {
-                            adapter.Fill(dataTable);
-                        }
-                    }
-                }
+                var result = await Client.Rpc<dynamic>(functionName, parameters);
+                var token = JsonConvert.SerializeObject(result);
+                dt = JsonConvert.DeserializeObject<DataTable>(token);
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "DatabaseHelper.ExecuteQuery", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            return dataTable;
+
+            return dt;
         }
-        public static int ExecuteNonQueryWithReturnValue(string storedProcedure, SqlParameter[] parameters)
+        public static int ExecuteNonQueryWithReturnValue(string functionName, object parameters = null)
         {
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            using (SqlCommand command = new SqlCommand(storedProcedure, connection))
+            try
             {
-                command.CommandType = CommandType.StoredProcedure;
-                if (parameters != null)
-                {
-                    command.Parameters.AddRange(parameters);
-                }
-                SqlParameter returnValue = new SqlParameter();
-                returnValue.Direction = ParameterDirection.ReturnValue;
-                command.Parameters.Add(returnValue);
-                connection.Open();
-                command.ExecuteNonQuery();
-                return (int)returnValue.Value;
+                var result = Client.Rpc<dynamic>(functionName, parameters).GetAwaiter().GetResult();
+
+                if (result is long l)
+                    return (int)l;
+                if (result is int i)
+                    return i;
+                return Convert.ToInt32(result?.ToString());
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "DatabaseHelper.ExecuteNonQueryWithReturnValue", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return -1;
             }
         }
     }
