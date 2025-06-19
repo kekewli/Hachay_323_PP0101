@@ -41,17 +41,15 @@ namespace ProjectDishes
                                 MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            string hashedPassword = string.IsNullOrEmpty(newPassword)
-                ? null
-                : HashPassword(newPassword);
+            string hashedPassword = string.IsNullOrEmpty(newPassword) ? null : HashPassword(newPassword);
             var rpcParams = new
             {
-                p0 = userId,
-                p1 = userName,
-                p2 = hashedPassword,
-                p3 = email
+                p_user_id = userId,
+                p_name = userName,
+                p_pass = hashedPassword,
+                p_em = email
             };
-            bool success = await DatabaseHelper.ExecuteNonQuery("update_user", rpcParams);  // snake_case
+            bool success = await DatabaseHelper.ExecuteNonQuery("update_user", rpcParams);
             if (success)
             {
                 MessageBox.Show("Данные пользователя успешно обновлены.", "Готово", MessageBoxButtons.OK, MessageBoxIcon.Information);

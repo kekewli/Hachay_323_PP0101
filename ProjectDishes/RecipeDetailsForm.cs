@@ -2,6 +2,7 @@
 using System.Data;
 using System.Drawing;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ProjectDishes
@@ -15,24 +16,23 @@ namespace ProjectDishes
             InitializeComponent(); 
             AppStyle.ApplyStyle(this); 
             this.recipeId = recipeId;
-            LoadRecipeDetails(); 
+            _=LoadRecipeDetails(); 
             this.MaximizeBox = false;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
         }
-        private void LoadRecipeDetails() //загрузка деталей
+        private async Task LoadRecipeDetails() //загрузка деталей
         {
-            var rpcParams = new { p0 = recipeId };
-            DataTable recipeDetails = DatabaseHelper.ExecuteQuery("get_recipe_details", rpcParams).GetAwaiter().GetResult();
-
-            if (recipeDetails.Rows.Count == 0)
+            var rpcParams = new { p_id = recipeId };
+            DataTable dt = await DatabaseHelper.ExecuteQuery("get_recipe_details", rpcParams);
+            if (dt.Rows.Count == 0)
             {
                 MessageBox.Show("Информация о рецепте не найдена.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.Close();
                 return;
             }
-            DataRow row = recipeDetails.Rows[0];
+            var row = dt.Rows[0];
 
-            lblRecipeName.Text = row["recipe_name"].ToString();
+            lblRecipeName.Text = $"Название: {row["recipe_name"].ToString()}";
             lblRecipeName.AutoSize = true;
             lblRecipeName.Size = new Size(320, lblRecipeName.PreferredHeight);
 

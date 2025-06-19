@@ -5,6 +5,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Linq;
 using System.Windows.Forms;
+using System.Text;
 
 namespace ProjectDishes
 {
@@ -12,6 +13,7 @@ namespace ProjectDishes
     {
         private int userId;
         private int? selectedRecipeId;
+        private readonly Timer _refreshTimer;
         public UserForm(int userId)
         {
             InitializeComponent();
@@ -19,6 +21,9 @@ namespace ProjectDishes
             _ = LoadRecipes();
             this.MaximizeBox = false;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
+            _refreshTimer = new Timer { Interval = 10000 };
+            _refreshTimer.Tick += async (_, __) => await LoadRecipes();
+            _refreshTimer.Start();
             AppStyle.ApplyStyle(this);
         }
         private async Task LoadRecipes() //загрузка рецептов
@@ -35,7 +40,7 @@ namespace ProjectDishes
         {
             var panel = new Panel
             {
-                Size = new Size(300, 100),
+                Size = new Size(300, 120),
                 BorderStyle = BorderStyle.FixedSingle,
                 Tag = row["recipe_id"]
             };
@@ -47,17 +52,54 @@ namespace ProjectDishes
             };
             if (row["image"] != DBNull.Value)
             {
-                byte[] imageData = (byte[])row["image"];
-                using var ms = new MemoryStream(imageData);
-                pictureBox.Image = Image.FromStream(ms);
+                byte[] imageData = null;
+                if (row["image"] is byte[] bytes)
+                {
+                    imageData = bytes;
+                }
+                else if (row["image"] is string hexString && hexString.StartsWith(@"\x", StringComparison.OrdinalIgnoreCase))
+                {
+                    try
+                    {
+                        string hex = hexString.Substring(2);
+                        int len = hex.Length;
+                        imageData = new byte[len / 2];
+                        for (int i = 0; i < len; i += 2)
+                            imageData[i / 2] = Convert.ToByte(hex.Substring(i, 2), 16);
+                    }
+                    catch
+                    {
+                        imageData = null; 
+                    }
+                }
+                if (imageData?.Length > 0)
+                {
+                    using var ms = new MemoryStream(imageData);
+                    try
+                    {
+                        pictureBox.Image = Image.FromStream(ms);
+                    }
+                    catch
+                    {
+                    }
+                }
             }
             var nameLabel = new Label
             {
                 Text = row["recipe_name"].ToString(),
                 Location = new Point(100, 10),
-                Size = new Size(200, 50),
+                Size = new Size(150, 50),
                 Font = new Font("Arial", 10, FontStyle.Regular),
                 AutoEllipsis = true
+            };
+            var rating = Convert.ToDecimal(row["average_rating"]);
+            var ratingLabel = new Label
+            {
+                Text = $"★ {rating:F1}",
+                Location = new Point(250, 60),
+                Size = new Size(60, 20),
+                Font = new Font("Arial", 9, FontStyle.Italic),
+                ForeColor = Color.Goldenrod
             };
             var viewButton = new Button
             {
@@ -67,10 +109,12 @@ namespace ProjectDishes
             };
             panel.Controls.Add(pictureBox);
             panel.Controls.Add(nameLabel);
+            panel.Controls.Add(ratingLabel);
             panel.Controls.Add(viewButton);
             panel.Click += (s, e) => SelectRecipePanel(panel);
             pictureBox.Click += (s, e) => SelectRecipePanel(panel);
             nameLabel.Click += (s, e) => SelectRecipePanel(panel);
+            ratingLabel.Click += (s, e) => SelectRecipePanel(panel);
             viewButton.Click += (s, e) => OpenRecipeDetails(Convert.ToInt32(panel.Tag));
             return panel;
         }
@@ -104,21 +148,38 @@ namespace ProjectDishes
                 p_user = userId,
                 p_recipe = selectedRecipeId.Value
             };
-            bool ok = await DatabaseHelper.ExecuteNonQuery("add_recipe_to_user_storage", rpcParams); // snake_case
-            if (ok)
+            bool added;
+            try
+            {
+                added = await DatabaseHelper.ExecuteNonQuery("add_recipe_to_user_storage", rpcParams);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при добавлении: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (added)
+            {
                 MessageBox.Show("Рецепт добавлен в избранное.", "Готово", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
             else
-                MessageBox.Show("Не удалось добавить рецепт.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            {
+                MessageBox.Show("Этот рецепт уже находится в вашем хранилище.", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
         private void btnOpenStorage_Click(object sender, EventArgs e) //открытие избранного
         {
             var storageForm = new UserStorageForm(userId);
             storageForm.ShowDialog();
         }
-        private void btnCreateRecipe_Click(object sender, EventArgs e) //создание рецепта
+        private async void btnCreateRecipe_Click(object sender, EventArgs e) //создание рецепта
         {
-            var createRecipeForm = new CreateRecipeForm(userId);
-            createRecipeForm.ShowDialog();
+            using var createRecipeForm = new CreateRecipeForm(userId);
+            if (createRecipeForm.ShowDialog() == DialogResult.OK)
+            {
+                await LoadRecipes(); 
+            }
         }
         private void btnExit_Click(object sender, EventArgs e)
         {
@@ -128,7 +189,7 @@ namespace ProjectDishes
         private async void txtSearch_TextChanged(object sender, EventArgs e) //поиск 
         {
             string keyword = txtSearch.Text.Trim();
-            var rpcParams = new { p0 = keyword };
+            var rpcParams = new { p_key = keyword };
             DataTable filtered = await DatabaseHelper.ExecuteQuery("search_recipes", rpcParams);
             flowLayoutPanelRecipes.Controls.Clear();
             foreach (DataRow row in filtered.Rows)
@@ -144,6 +205,17 @@ namespace ProjectDishes
         private void UserForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             Application.Exit();
+        }
+        protected override void OnFormClosed(FormClosedEventArgs e)
+        {
+            _refreshTimer?.Stop();
+            _refreshTimer?.Dispose();
+            base.OnFormClosed(e);
+        }
+        protected override async void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            await LoadRecipes();
         }
     }
 }

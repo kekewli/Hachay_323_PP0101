@@ -19,8 +19,12 @@ namespace ProjectDishes
             this.userId = userId;
             this.MaximizeBox = false;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
-            _=LoadUserRecipes();
             AppStyle.ApplyStyle(this);
+            this.Shown += UserStorageForm_Shown;
+        }
+        private async void UserStorageForm_Shown(object sender, EventArgs e)
+        {
+            await LoadUserRecipes();
         }
         private async Task LoadUserRecipes() //загрузка рецептов пользователей
         {
@@ -49,9 +53,37 @@ namespace ProjectDishes
             };
             if (row["image"] != DBNull.Value)
             {
-                byte[] imageData = (byte[])row["image"];
-                using MemoryStream ms = new MemoryStream(imageData);
-                pictureBox.Image = Image.FromStream(ms);
+                byte[] imageData = null;
+                if (row["image"] is byte[] bytes)
+                {
+                    imageData = bytes;
+                }
+                else if (row["image"] is string hexString && hexString.StartsWith(@"\x", StringComparison.OrdinalIgnoreCase))
+                {
+                    try
+                    {
+                        string hex = hexString.Substring(2);
+                        int len = hex.Length;
+                        imageData = new byte[len / 2];
+                        for (int i = 0; i < len; i += 2)
+                            imageData[i / 2] = Convert.ToByte(hex.Substring(i, 2), 16);
+                    }
+                    catch
+                    {
+                        imageData = null;
+                    }
+                }
+                if (imageData?.Length > 0)
+                {
+                    using var ms = new MemoryStream(imageData);
+                    try
+                    {
+                        pictureBox.Image = Image.FromStream(ms);
+                    }
+                    catch
+                    {
+                    }
+                }
             }
             Label nameLabel = new Label
             {
@@ -84,10 +116,14 @@ namespace ProjectDishes
         private void SelectRecipePanel(Panel panel) //выбор панели
         {
             foreach (Control control in flowLayoutPanelUserRecipes.Controls)
+            {
                 if (control is Panel otherPanel)
+                {
                     otherPanel.BackColor = SystemColors.Control;
+                }
+            }
             panel.BackColor = Color.LightBlue;
-            selectedRecipeId = (int?)panel.Tag;
+            selectedRecipeId = Convert.ToInt32(panel.Tag);
         }
         private async void btnDeleteRecipe_Click_1(object sender, EventArgs e) //удаление
         {
@@ -99,11 +135,11 @@ namespace ProjectDishes
 
             var rpcParams = new
             {
-                p0 = userId,
-                p1 = selectedRecipeId.Value
+                p_user = userId,
+                p_recipe = selectedRecipeId.Value
             };
 
-            if (await DatabaseHelper.ExecuteNonQuery("delete_recipe_from_user_storage", rpcParams)) // ← ИЗМЕНЕНО
+            if (await DatabaseHelper.ExecuteNonQuery("delete_recipe_from_user_storage", rpcParams))
             {
                 MessageBox.Show("Рецепт удален из избранного.");
                 await LoadUserRecipes();
@@ -127,8 +163,8 @@ namespace ProjectDishes
         {
             var rpcParams = new
             {
-                p0 = userId,
-                p1 = keyword
+                p_user = userId,
+                p_key = keyword
             };
             DataTable results = await DatabaseHelper.ExecuteQuery("search_user_recipes", rpcParams);
             flowLayoutPanelUserRecipes.Controls.Clear();

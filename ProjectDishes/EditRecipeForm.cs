@@ -2,6 +2,7 @@
 using System.Data;
 using System.Drawing;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ProjectDishes
@@ -14,44 +15,70 @@ namespace ProjectDishes
         {
             InitializeComponent();
             this.recipeId = recipeId;
-            AppStyle.ApplyStyle(this);
-            LoadCategories();
-            LoadRecipeDetails();
             this.MaximizeBox = false;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
-            ConfigurePictureBox();
+            this.Shown += async (s, e) =>
+            {
+                await LoadCategories();
+                await LoadRecipeDetails(); 
+                ConfigurePictureBox();
+            };
+            AppStyle.ApplyStyle(this);
         }
-        private void LoadCategories() //категории
+        private async Task LoadCategories() //категории
         {
-            var dt = DatabaseHelper.ExecuteQuery("get_categories").GetAwaiter().GetResult();
+            var dt = await DatabaseHelper.ExecuteQuery("get_categories");
             cmbCategory.DataSource = dt;
             cmbCategory.DisplayMember = "category_name";
             cmbCategory.ValueMember = "category_id";
         }
-        private void LoadRecipeDetails() //детали рецепта
+        private async Task LoadRecipeDetails() //детали рецепта
         {
-            var rpcParams = new { p0 = recipeId };
-            var recipeDetails = DatabaseHelper.ExecuteQuery("get_recipe_by_id", rpcParams) .GetAwaiter().GetResult();
-            if (recipeDetails.Rows.Count > 0)
+            var rpcParams = new { p_recipe_id = recipeId };
+            var dt = await DatabaseHelper.ExecuteQuery("get_recipe_by_id", rpcParams);
+            if (dt.Rows.Count == 0) return;
+            var row = dt.Rows[0];
+            txtRecipeName.Text = row["recipe_name"].ToString();
+            txtDescription.Text = row["description"].ToString();
+            txtIngredients.Text = row["ingredients"].ToString();
+            cmbCategory.SelectedValue = row["category_id"];
+            if (row["image"] != DBNull.Value)
             {
-                var row = recipeDetails.Rows[0];
-                txtRecipeName.Text = row["recipe_name"].ToString();
-                txtDescription.Text = row["description"].ToString(); 
-                txtIngredients.Text = row["ingredients"].ToString(); 
-                string categoryName = row["category_name"].ToString();
-                cmbCategory.SelectedIndex = cmbCategory.FindStringExact(categoryName);
-                if (row["image"] != DBNull.Value)
+                byte[] imageData = null;
+                if (row["image"] is byte[] bytes)
                 {
-                    byte[] imageData = (byte[])row["image"];
+                    imageData = bytes;
+                }
+                else if (row["image"] is string hexString && hexString.StartsWith(@"\x", StringComparison.OrdinalIgnoreCase))
+                {
+                    try
+                    {
+                        string hex = hexString.Substring(2);
+                        int len = hex.Length;
+                        imageData = new byte[len / 2];
+                        for (int i = 0; i < len; i += 2)
+                            imageData[i / 2] = Convert.ToByte(hex.Substring(i, 2), 16);
+                    }
+                    catch
+                    {
+                        imageData = null;
+                    }
+                }
+                if (imageData?.Length > 0)
+                {
                     using var ms = new MemoryStream(imageData);
-                    pictureBoxRecipe.Image = Image.FromStream(ms);
-                    pictureBoxRecipe.SizeMode = PictureBoxSizeMode.Zoom;
-                    recipeImage = imageData;
+                    try
+                    {
+                        pictureBoxRecipe.Image = Image.FromStream(ms);
+                    }
+                    catch
+                    {
+                    }
                 }
-                else
-                {
-                    pictureBoxRecipe.Image = null;
-                }
+            }
+            else
+            {
+                pictureBoxRecipe.Image = null;
             }
         }
         private void ConfigurePictureBox()
@@ -132,12 +159,12 @@ namespace ProjectDishes
             }
             var rpcParams = new
             {
-                p0 = recipeId,
-                p1 = recipeName,
-                p2 = description,
-                p3 = ingredients,
-                p4 = categoryId,
-                p5 = recipeImage
+                p_id = recipeId,
+                p_name = recipeName,
+                p_desc = description,
+                p_ingr = ingredients,
+                p_cat = categoryId,
+                p_image = recipeImage
             };
             bool ok = await DatabaseHelper.ExecuteNonQuery("update_recipe", rpcParams); // lower_snake_case
             if (ok)

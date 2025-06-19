@@ -4,8 +4,8 @@ using Npgsql;
 using System.Drawing;
 using System.IO;
 using System.Threading.Tasks;
+using Supabase.Storage;
 using System.Windows.Forms;
-using System.Windows.Shapes;
 
 namespace ProjectDishes
 {
@@ -26,7 +26,6 @@ namespace ProjectDishes
         {
             this.recipeId = recipeId;
             _ = LoadCategories();
-            LoadRecipeDetails();
         }
         private async Task LoadCategories() //загрузка категорий
         {
@@ -35,27 +34,7 @@ namespace ProjectDishes
             comboBoxCategory.DisplayMember = "category_name"; 
             comboBoxCategory.ValueMember = "category_id";
         }
-        private void LoadRecipeDetails()
-        {
-            var rpcParams = new { p0 = recipeId };
-            DataTable dt = DatabaseHelper
-                .ExecuteQuery("get_recipe_by_id", rpcParams)
-                .GetAwaiter().GetResult();
-            if (dt.Rows.Count == 0) return;
-            var row = dt.Rows[0];
-            txtRecipeName.Text = row["recipe_name"].ToString();
-            txtDescription.Text = row["description"].ToString();
-            txtIngredients.Text = row["ingredients"].ToString();
-            comboBoxCategory.SelectedValue = row["category_id"];
-            if (row["image"] != DBNull.Value)
-            {
-                byte[] img = (byte[])row["image"];
-                using var ms = new MemoryStream(img);
-                pictureBoxRecipe.Image = Image.FromStream(ms);
-                pictureBoxRecipe.SizeMode = PictureBoxSizeMode.Zoom;
-                recipeImage = img;
-            }
-        }
+
         private void ConfigurePictureBox() //картинка
         {
             pictureBoxRecipe.AllowDrop = true;
@@ -122,15 +101,13 @@ namespace ProjectDishes
             int catId = Convert.ToInt32(comboBoxCategory.SelectedValue);
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(desc) || string.IsNullOrEmpty(ingr))
             {
-                MessageBox.Show("Пожалуйста, заполните все поля.", "Ошибка",
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Пожалуйста, заполните все поля.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             if (recipeImage == null)
             {
                 var res = MessageBox.Show(
                     "Вы не добавили изображение. Загрузить сейчас?", "Изображение отсутствует", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-
                 if (res == DialogResult.Yes)
                 {
                     if (!TryLoadImageFromDialog())
@@ -163,17 +140,21 @@ namespace ProjectDishes
             {
                 var updateParams = new
                 {
-                    p_recipe_id = recipeId,
+                    p_id = recipeId,
                     p_name = name,
                     p_desc = desc,
                     p_ingr = ingr,
-                    p_cat_id = catId,
-                    p_image= recipeImage
+                    p_cat = catId,
+                    p_image = recipeImage
                 };
                 ok = await DatabaseHelper.ExecuteNonQuery("update_recipe", updateParams);
                 if (ok) MessageBox.Show("Рецепт успешно обновлён.");
             }
-            if (ok) this.Close();
+            if (ok)
+            {
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+            }
         }
         private bool TryLoadImageFromDialog() // попытка загрузки изображения через диалог
         {

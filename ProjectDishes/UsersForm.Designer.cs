@@ -29,90 +29,95 @@ namespace ProjectDishes
         /// </summary>
         private void InitializeComponent()
         {
-            this.dataGridViewUsers = new System.Windows.Forms.DataGridView();
-            this.btnDeleteUser = new System.Windows.Forms.Button();
-            this.btnUpdateUser = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.txtSearch = new System.Windows.Forms.TextBox();
-            this.btnSetAdminRights = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewUsers)).BeginInit();
-            this.SuspendLayout();
+            dataGridViewUsers = new System.Windows.Forms.DataGridView();
+            btnDeleteUser = new System.Windows.Forms.Button();
+            btnUpdateUser = new System.Windows.Forms.Button();
+            label1 = new System.Windows.Forms.Label();
+            txtSearch = new System.Windows.Forms.TextBox();
+            btnSetAdminRights = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewUsers).BeginInit();
+            SuspendLayout();
             // 
             // dataGridViewUsers
             // 
-            this.dataGridViewUsers.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewUsers.Location = new System.Drawing.Point(12, 12);
-            this.dataGridViewUsers.Name = "dataGridViewUsers";
-            this.dataGridViewUsers.RowHeadersWidth = 51;
-            this.dataGridViewUsers.RowTemplate.Height = 24;
-            this.dataGridViewUsers.Size = new System.Drawing.Size(600, 425);
-            this.dataGridViewUsers.TabIndex = 1;
-            this.dataGridViewUsers.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewUsers_CellContentClick);
+            dataGridViewUsers.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewUsers.Location = new System.Drawing.Point(12, 15);
+            dataGridViewUsers.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            dataGridViewUsers.Name = "dataGridViewUsers";
+            dataGridViewUsers.RowHeadersWidth = 51;
+            dataGridViewUsers.RowTemplate.Height = 24;
+            dataGridViewUsers.Size = new System.Drawing.Size(867, 531);
+            dataGridViewUsers.TabIndex = 1;
+            dataGridViewUsers.CellContentClick += dataGridViewUsers_CellContentClick;
             // 
             // btnDeleteUser
             // 
-            this.btnDeleteUser.Location = new System.Drawing.Point(618, 65);
-            this.btnDeleteUser.Name = "btnDeleteUser";
-            this.btnDeleteUser.Size = new System.Drawing.Size(162, 34);
-            this.btnDeleteUser.TabIndex = 6;
-            this.btnDeleteUser.Text = "Удалить";
-            this.btnDeleteUser.UseVisualStyleBackColor = true;
-            this.btnDeleteUser.Click += new System.EventHandler(this.btnDeleteUser_Click);
+            btnDeleteUser.Location = new System.Drawing.Point(888, 79);
+            btnDeleteUser.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            btnDeleteUser.Name = "btnDeleteUser";
+            btnDeleteUser.Size = new System.Drawing.Size(162, 42);
+            btnDeleteUser.TabIndex = 6;
+            btnDeleteUser.Text = "Удалить";
+            btnDeleteUser.UseVisualStyleBackColor = true;
+            btnDeleteUser.Click += btnDeleteUser_Click;
             // 
             // btnUpdateUser
             // 
-            this.btnUpdateUser.Location = new System.Drawing.Point(618, 12);
-            this.btnUpdateUser.Name = "btnUpdateUser";
-            this.btnUpdateUser.Size = new System.Drawing.Size(162, 34);
-            this.btnUpdateUser.TabIndex = 4;
-            this.btnUpdateUser.Text = "Изменить";
-            this.btnUpdateUser.UseVisualStyleBackColor = true;
-            this.btnUpdateUser.Click += new System.EventHandler(this.btnUpdateUser_Click);
+            btnUpdateUser.Location = new System.Drawing.Point(888, 13);
+            btnUpdateUser.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            btnUpdateUser.Name = "btnUpdateUser";
+            btnUpdateUser.Size = new System.Drawing.Size(162, 42);
+            btnUpdateUser.TabIndex = 4;
+            btnUpdateUser.Text = "Изменить";
+            btnUpdateUser.UseVisualStyleBackColor = true;
+            btnUpdateUser.Click += btnUpdateUser_Click;
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(615, 205);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(48, 17);
-            this.label1.TabIndex = 12;
-            this.label1.Text = "Поиск";
+            label1.AutoSize = true;
+            label1.Location = new System.Drawing.Point(885, 254);
+            label1.Name = "label1";
+            label1.Size = new System.Drawing.Size(52, 20);
+            label1.TabIndex = 12;
+            label1.Text = "Поиск";
             // 
             // txtSearch
             // 
-            this.txtSearch.Location = new System.Drawing.Point(618, 225);
-            this.txtSearch.Name = "txtSearch";
-            this.txtSearch.Size = new System.Drawing.Size(158, 22);
-            this.txtSearch.TabIndex = 11;
-            this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
+            txtSearch.Location = new System.Drawing.Point(888, 284);
+            txtSearch.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            txtSearch.Name = "txtSearch";
+            txtSearch.Size = new System.Drawing.Size(158, 27);
+            txtSearch.TabIndex = 11;
+            txtSearch.TextChanged += txtSearch_TextChanged;
             // 
             // btnSetAdminRights
             // 
-            this.btnSetAdminRights.Location = new System.Drawing.Point(618, 121);
-            this.btnSetAdminRights.Name = "btnSetAdminRights";
-            this.btnSetAdminRights.Size = new System.Drawing.Size(162, 34);
-            this.btnSetAdminRights.TabIndex = 14;
-            this.btnSetAdminRights.Text = "Изменить доступ";
-            this.btnSetAdminRights.UseVisualStyleBackColor = true;
-            this.btnSetAdminRights.Click += new System.EventHandler(this.btnSetAdminRights_Click_1);
+            btnSetAdminRights.Location = new System.Drawing.Point(888, 149);
+            btnSetAdminRights.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            btnSetAdminRights.Name = "btnSetAdminRights";
+            btnSetAdminRights.Size = new System.Drawing.Size(162, 42);
+            btnSetAdminRights.TabIndex = 14;
+            btnSetAdminRights.Text = "Изменить доступ";
+            btnSetAdminRights.UseVisualStyleBackColor = true;
+            btnSetAdminRights.Click += btnSetAdminRights_Click_1;
             // 
             // UsersForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(786, 450);
-            this.Controls.Add(this.btnSetAdminRights);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.txtSearch);
-            this.Controls.Add(this.btnDeleteUser);
-            this.Controls.Add(this.btnUpdateUser);
-            this.Controls.Add(this.dataGridViewUsers);
-            this.Name = "UsersForm";
-            this.Text = "Пользователи";
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewUsers)).EndInit();
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+            AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            ClientSize = new System.Drawing.Size(1062, 562);
+            Controls.Add(btnSetAdminRights);
+            Controls.Add(label1);
+            Controls.Add(txtSearch);
+            Controls.Add(btnDeleteUser);
+            Controls.Add(btnUpdateUser);
+            Controls.Add(dataGridViewUsers);
+            Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            Name = "UsersForm";
+            Text = "Пользователи";
+            ((System.ComponentModel.ISupportInitialize)dataGridViewUsers).EndInit();
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion

@@ -29,99 +29,102 @@ namespace ProjectDishes
         /// </summary>
         private void InitializeComponent()
         {
-            this.pictureBoxRecipe = new System.Windows.Forms.PictureBox();
-            this.lblRecipeName = new System.Windows.Forms.Label();
-            this.lblCategory = new System.Windows.Forms.Label();
-            this.txtDescription = new System.Windows.Forms.TextBox();
-            this.txtIngredients = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxRecipe)).BeginInit();
-            this.SuspendLayout();
+            pictureBoxRecipe = new System.Windows.Forms.PictureBox();
+            lblRecipeName = new System.Windows.Forms.Label();
+            lblCategory = new System.Windows.Forms.Label();
+            txtDescription = new System.Windows.Forms.TextBox();
+            txtIngredients = new System.Windows.Forms.TextBox();
+            label1 = new System.Windows.Forms.Label();
+            label2 = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)pictureBoxRecipe).BeginInit();
+            SuspendLayout();
             // 
             // pictureBoxRecipe
             // 
-            this.pictureBoxRecipe.Location = new System.Drawing.Point(12, 12);
-            this.pictureBoxRecipe.Name = "pictureBoxRecipe";
-            this.pictureBoxRecipe.Size = new System.Drawing.Size(180, 180);
-            this.pictureBoxRecipe.TabIndex = 0;
-            this.pictureBoxRecipe.TabStop = false;
-            this.pictureBoxRecipe.Click += new System.EventHandler(this.pictureBoxRecipe_Click);
+            pictureBoxRecipe.Location = new System.Drawing.Point(12, 15);
+            pictureBoxRecipe.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            pictureBoxRecipe.Name = "pictureBoxRecipe";
+            pictureBoxRecipe.Size = new System.Drawing.Size(180, 225);
+            pictureBoxRecipe.TabIndex = 0;
+            pictureBoxRecipe.TabStop = false;
+            pictureBoxRecipe.Click += pictureBoxRecipe_Click;
             // 
             // lblRecipeName
             // 
-            this.lblRecipeName.AutoSize = true;
-            this.lblRecipeName.Location = new System.Drawing.Point(198, 12);
-            this.lblRecipeName.Name = "lblRecipeName";
-            this.lblRecipeName.Size = new System.Drawing.Size(46, 17);
-            this.lblRecipeName.TabIndex = 1;
-            this.lblRecipeName.Text = "label1";
+            lblRecipeName.AutoSize = true;
+            lblRecipeName.Location = new System.Drawing.Point(198, 15);
+            lblRecipeName.Name = "lblRecipeName";
+            lblRecipeName.Size = new System.Drawing.Size(50, 20);
+            lblRecipeName.TabIndex = 1;
+            lblRecipeName.Text = "label1";
             // 
             // lblCategory
             // 
-            this.lblCategory.AutoSize = true;
-            this.lblCategory.Location = new System.Drawing.Point(198, 51);
-            this.lblCategory.Name = "lblCategory";
-            this.lblCategory.Size = new System.Drawing.Size(46, 17);
-            this.lblCategory.TabIndex = 2;
-            this.lblCategory.Text = "label1";
+            lblCategory.AutoSize = true;
+            lblCategory.Location = new System.Drawing.Point(198, 64);
+            lblCategory.Name = "lblCategory";
+            lblCategory.Size = new System.Drawing.Size(50, 20);
+            lblCategory.TabIndex = 2;
+            lblCategory.Text = "label1";
             // 
             // txtDescription
             // 
-            this.txtDescription.Location = new System.Drawing.Point(198, 99);
-            this.txtDescription.Name = "txtDescription";
-            this.txtDescription.ReadOnly = true;
-            this.txtDescription.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtDescription.Size = new System.Drawing.Size(590, 22);
-            this.txtDescription.TabIndex = 5;
-            this.txtDescription.TabStop = false;
+            txtDescription.Location = new System.Drawing.Point(198, 144);
+            txtDescription.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            txtDescription.Name = "txtDescription";
+            txtDescription.ReadOnly = true;
+            txtDescription.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            txtDescription.Size = new System.Drawing.Size(590, 27);
+            txtDescription.TabIndex = 5;
+            txtDescription.TabStop = false;
             // 
             // txtIngredients
             // 
-            this.txtIngredients.Location = new System.Drawing.Point(12, 215);
-            this.txtIngredients.Name = "txtIngredients";
-            this.txtIngredients.ReadOnly = true;
-            this.txtIngredients.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtIngredients.Size = new System.Drawing.Size(776, 22);
-            this.txtIngredients.TabIndex = 6;
-            this.txtIngredients.TabStop = false;
+            txtIngredients.Location = new System.Drawing.Point(12, 300);
+            txtIngredients.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            txtIngredients.Name = "txtIngredients";
+            txtIngredients.ReadOnly = true;
+            txtIngredients.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            txtIngredients.Size = new System.Drawing.Size(776, 27);
+            txtIngredients.TabIndex = 6;
+            txtIngredients.TabStop = false;
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 195);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(100, 17);
-            this.label1.TabIndex = 7;
-            this.label1.Text = "Ингридиенты:";
+            label1.AutoSize = true;
+            label1.Location = new System.Drawing.Point(12, 266);
+            label1.Name = "label1";
+            label1.Size = new System.Drawing.Size(107, 20);
+            label1.TabIndex = 7;
+            label1.Text = "Ингридиенты:";
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(198, 79);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(78, 17);
-            this.label2.TabIndex = 8;
-            this.label2.Text = "Описание:";
+            label2.AutoSize = true;
+            label2.Location = new System.Drawing.Point(198, 106);
+            label2.Name = "label2";
+            label2.Size = new System.Drawing.Size(82, 20);
+            label2.TabIndex = 8;
+            label2.Text = "Описание:";
             // 
             // RecipeDetailsForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 316);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.txtIngredients);
-            this.Controls.Add(this.txtDescription);
-            this.Controls.Add(this.lblCategory);
-            this.Controls.Add(this.lblRecipeName);
-            this.Controls.Add(this.pictureBoxRecipe);
-            this.Name = "RecipeDetailsForm";
-            this.Text = "Детали рецепта";
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxRecipe)).EndInit();
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+            AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            ClientSize = new System.Drawing.Size(800, 452);
+            Controls.Add(label2);
+            Controls.Add(label1);
+            Controls.Add(txtIngredients);
+            Controls.Add(txtDescription);
+            Controls.Add(lblCategory);
+            Controls.Add(lblRecipeName);
+            Controls.Add(pictureBoxRecipe);
+            Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            Name = "RecipeDetailsForm";
+            Text = "Детали рецепта";
+            ((System.ComponentModel.ISupportInitialize)pictureBoxRecipe).EndInit();
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion

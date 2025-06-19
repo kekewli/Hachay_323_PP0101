@@ -42,7 +42,7 @@ namespace ProjectDishes
             // 
             // btnAddRecipe
             // 
-            btnAddRecipe.Location = new System.Drawing.Point(794, 12);
+            btnAddRecipe.Location = new System.Drawing.Point(714, 18);
             btnAddRecipe.Name = "btnAddRecipe";
             btnAddRecipe.Size = new System.Drawing.Size(163, 43);
             btnAddRecipe.TabIndex = 1;
@@ -52,7 +52,7 @@ namespace ProjectDishes
             // 
             // btnEditRecipe
             // 
-            btnEditRecipe.Location = new System.Drawing.Point(794, 79);
+            btnEditRecipe.Location = new System.Drawing.Point(714, 85);
             btnEditRecipe.Name = "btnEditRecipe";
             btnEditRecipe.Size = new System.Drawing.Size(163, 43);
             btnEditRecipe.TabIndex = 2;
@@ -62,7 +62,7 @@ namespace ProjectDishes
             // 
             // btnDeleteRecipe
             // 
-            btnDeleteRecipe.Location = new System.Drawing.Point(794, 142);
+            btnDeleteRecipe.Location = new System.Drawing.Point(714, 148);
             btnDeleteRecipe.Name = "btnDeleteRecipe";
             btnDeleteRecipe.Size = new System.Drawing.Size(163, 43);
             btnDeleteRecipe.TabIndex = 3;
@@ -72,7 +72,7 @@ namespace ProjectDishes
             // 
             // btnUserRequests
             // 
-            btnUserRequests.Location = new System.Drawing.Point(794, 206);
+            btnUserRequests.Location = new System.Drawing.Point(714, 212);
             btnUserRequests.Name = "btnUserRequests";
             btnUserRequests.Size = new System.Drawing.Size(163, 43);
             btnUserRequests.TabIndex = 4;
@@ -82,7 +82,7 @@ namespace ProjectDishes
             // 
             // btnExit
             // 
-            btnExit.Location = new System.Drawing.Point(794, 500);
+            btnExit.Location = new System.Drawing.Point(714, 506);
             btnExit.Name = "btnExit";
             btnExit.Size = new System.Drawing.Size(163, 43);
             btnExit.TabIndex = 5;
@@ -92,7 +92,7 @@ namespace ProjectDishes
             // 
             // btnUsers
             // 
-            btnUsers.Location = new System.Drawing.Point(794, 271);
+            btnUsers.Location = new System.Drawing.Point(714, 277);
             btnUsers.Name = "btnUsers";
             btnUsers.Size = new System.Drawing.Size(163, 43);
             btnUsers.TabIndex = 6;
@@ -103,7 +103,7 @@ namespace ProjectDishes
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new System.Drawing.Point(795, 355);
+            label1.Location = new System.Drawing.Point(715, 361);
             label1.Name = "label1";
             label1.Size = new System.Drawing.Size(52, 20);
             label1.TabIndex = 10;
@@ -111,7 +111,7 @@ namespace ProjectDishes
             // 
             // txtSearch
             // 
-            txtSearch.Location = new System.Drawing.Point(796, 380);
+            txtSearch.Location = new System.Drawing.Point(715, 393);
             txtSearch.Name = "txtSearch";
             txtSearch.Size = new System.Drawing.Size(159, 27);
             txtSearch.TabIndex = 9;
@@ -122,7 +122,7 @@ namespace ProjectDishes
             flowLayoutPanelRecipes.AutoScroll = true;
             flowLayoutPanelRecipes.Location = new System.Drawing.Point(7, 17);
             flowLayoutPanelRecipes.Name = "flowLayoutPanelRecipes";
-            flowLayoutPanelRecipes.Size = new System.Drawing.Size(781, 532);
+            flowLayoutPanelRecipes.Size = new System.Drawing.Size(701, 532);
             flowLayoutPanelRecipes.TabIndex = 11;
             // 
             // AdminForm
@@ -130,7 +130,7 @@ namespace ProjectDishes
             AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             BackColor = System.Drawing.Color.Lavender;
-            ClientSize = new System.Drawing.Size(969, 563);
+            ClientSize = new System.Drawing.Size(887, 563);
             Controls.Add(flowLayoutPanelRecipes);
             Controls.Add(label1);
             Controls.Add(txtSearch);

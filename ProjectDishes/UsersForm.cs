@@ -23,7 +23,6 @@ namespace ProjectDishes
             DataTable users = await DatabaseHelper.ExecuteQuery("get_all_users");
 
             dataGridViewUsers.DataSource = users;
-            //скрытие колон
             if (dataGridViewUsers.Columns.Contains("role_id"))
                 dataGridViewUsers.Columns["role_id"].Visible = false;
             if (dataGridViewUsers.Columns.Contains("is_admin"))
@@ -37,16 +36,21 @@ namespace ProjectDishes
         private async void txtSearch_TextChanged(object sender, EventArgs e) //поиск
         {
             string keyword = txtSearch.Text.Trim();
-            var rpcParams = new { p0 = keyword };
+            var rpcParams = new { p_key = keyword };
             DataTable users = await DatabaseHelper.ExecuteQuery("search_users", rpcParams);
             dataGridViewUsers.DataSource = users;
             if (dataGridViewUsers.Columns.Contains("role_id"))
-            dataGridViewUsers.Columns["role_id"].Visible = false;
-            dataGridViewUsers.Columns["role_name"].HeaderText = "Роль";
-            dataGridViewUsers.Columns["user_name"].HeaderText = "Имя пользователя";
-            dataGridViewUsers.Columns["password_hash"].HeaderText = "Пароль";
-            dataGridViewUsers.Columns["email"].HeaderText = "Электронная почта";
-            dataGridViewUsers.Columns["user_id"].HeaderText = "ID пользователя";
+                dataGridViewUsers.Columns["role_id"].Visible = false;
+            if (dataGridViewUsers.Columns.Contains("role_name"))
+                dataGridViewUsers.Columns["role_name"].HeaderText = "Роль";
+            if (dataGridViewUsers.Columns.Contains("user_name"))
+                dataGridViewUsers.Columns["user_name"].HeaderText = "Имя пользователя";
+            if (dataGridViewUsers.Columns.Contains("password_hash"))
+                dataGridViewUsers.Columns["password_hash"].HeaderText = "Пароль";
+            if (dataGridViewUsers.Columns.Contains("email"))
+                dataGridViewUsers.Columns["email"].HeaderText = "Электронная почта";
+            if (dataGridViewUsers.Columns.Contains("user_id"))
+                dataGridViewUsers.Columns["user_id"].HeaderText = "ID пользователя";
         }
         private void btnUpdateUser_Click(object sender, EventArgs e) //изменение 
         {
@@ -67,11 +71,9 @@ namespace ProjectDishes
                 MessageBox.Show("Выберите пользователя для удаления.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-
             int userId = Convert.ToInt32(dataGridViewUsers.SelectedRows[0].Cells["user_id"].Value);
-            var rpcParams = new { p0 = userId };
+            var rpcParams = new { p_user = userId };
             bool ok = await DatabaseHelper.ExecuteNonQuery("delete_user_and_recipes", rpcParams);  // snake_case
-
             if (ok)
             {
                 MessageBox.Show("Пользователь и его рецепты удалены.", "Готово", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -104,7 +106,7 @@ namespace ProjectDishes
             int userId = Convert.ToInt32(dataGridViewUsers.SelectedRows[0].Cells["user_id"].Value);
             int currentRole = Convert.ToInt32(dataGridViewUsers.SelectedRows[0].Cells["role_id"].Value);
             int newRole = (currentRole == 1) ? 2 : 1;
-            var rpcParams = new { p0 = userId, p1 = newRole };
+            var rpcParams = new { p_user_id = userId, p_new_role_id = newRole };
             bool ok = await DatabaseHelper.ExecuteNonQuery("set_admin_rights", rpcParams);  // snake_case
             if (ok)
             {

@@ -29,52 +29,55 @@ namespace ProjectDishes
         /// </summary>
         private void InitializeComponent()
         {
-            this.btnApproveRecipe = new System.Windows.Forms.Button();
-            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.btnDeleteRequest = new System.Windows.Forms.Button();
-            this.flowLayoutPanelRequests = new System.Windows.Forms.FlowLayoutPanel();
-            this.SuspendLayout();
+            btnApproveRecipe = new System.Windows.Forms.Button();
+            backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            btnDeleteRequest = new System.Windows.Forms.Button();
+            flowLayoutPanelRequests = new System.Windows.Forms.FlowLayoutPanel();
+            SuspendLayout();
             // 
             // btnApproveRecipe
             // 
-            this.btnApproveRecipe.Location = new System.Drawing.Point(574, 12);
-            this.btnApproveRecipe.Name = "btnApproveRecipe";
-            this.btnApproveRecipe.Size = new System.Drawing.Size(162, 34);
-            this.btnApproveRecipe.TabIndex = 1;
-            this.btnApproveRecipe.Text = "Добавить";
-            this.btnApproveRecipe.UseVisualStyleBackColor = true;
-            this.btnApproveRecipe.Click += new System.EventHandler(this.btnApproveRecipe_Click);
+            btnApproveRecipe.Location = new System.Drawing.Point(719, 13);
+            btnApproveRecipe.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            btnApproveRecipe.Name = "btnApproveRecipe";
+            btnApproveRecipe.Size = new System.Drawing.Size(162, 42);
+            btnApproveRecipe.TabIndex = 1;
+            btnApproveRecipe.Text = "Добавить";
+            btnApproveRecipe.UseVisualStyleBackColor = true;
+            btnApproveRecipe.Click += btnApproveRecipe_Click;
             // 
             // btnDeleteRequest
             // 
-            this.btnDeleteRequest.Location = new System.Drawing.Point(574, 52);
-            this.btnDeleteRequest.Name = "btnDeleteRequest";
-            this.btnDeleteRequest.Size = new System.Drawing.Size(162, 34);
-            this.btnDeleteRequest.TabIndex = 2;
-            this.btnDeleteRequest.Text = "Удалить";
-            this.btnDeleteRequest.UseVisualStyleBackColor = true;
-            this.btnDeleteRequest.Click += new System.EventHandler(this.btnDeleteRequest_Click);
+            btnDeleteRequest.Location = new System.Drawing.Point(719, 63);
+            btnDeleteRequest.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            btnDeleteRequest.Name = "btnDeleteRequest";
+            btnDeleteRequest.Size = new System.Drawing.Size(162, 42);
+            btnDeleteRequest.TabIndex = 2;
+            btnDeleteRequest.Text = "Удалить";
+            btnDeleteRequest.UseVisualStyleBackColor = true;
+            btnDeleteRequest.Click += btnDeleteRequest_Click;
             // 
             // flowLayoutPanelRequests
             // 
-            this.flowLayoutPanelRequests.Location = new System.Drawing.Point(12, 12);
-            this.flowLayoutPanelRequests.Name = "flowLayoutPanelRequests";
-            this.flowLayoutPanelRequests.Size = new System.Drawing.Size(556, 426);
-            this.flowLayoutPanelRequests.TabIndex = 3;
+            flowLayoutPanelRequests.Location = new System.Drawing.Point(12, 15);
+            flowLayoutPanelRequests.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            flowLayoutPanelRequests.Name = "flowLayoutPanelRequests";
+            flowLayoutPanelRequests.Size = new System.Drawing.Size(701, 532);
+            flowLayoutPanelRequests.TabIndex = 3;
             // 
             // UserRequestsForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.Lavender;
-            this.ClientSize = new System.Drawing.Size(745, 450);
-            this.Controls.Add(this.flowLayoutPanelRequests);
-            this.Controls.Add(this.btnDeleteRequest);
-            this.Controls.Add(this.btnApproveRecipe);
-            this.Name = "UserRequestsForm";
-            this.Text = "Запросы пользователей";
-            this.ResumeLayout(false);
-
+            AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            BackColor = System.Drawing.Color.Lavender;
+            ClientSize = new System.Drawing.Size(888, 555);
+            Controls.Add(flowLayoutPanelRequests);
+            Controls.Add(btnDeleteRequest);
+            Controls.Add(btnApproveRecipe);
+            Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            Name = "UserRequestsForm";
+            Text = "Запросы пользователей";
+            ResumeLayout(false);
         }
 
         #endregion

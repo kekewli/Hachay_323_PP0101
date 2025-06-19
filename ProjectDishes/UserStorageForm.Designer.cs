@@ -29,62 +29,65 @@ namespace ProjectDishes
         /// </summary>
         private void InitializeComponent()
         {
-            this.btnDeleteRecipe = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.txtSearch = new System.Windows.Forms.TextBox();
-            this.flowLayoutPanelUserRecipes = new System.Windows.Forms.FlowLayoutPanel();
-            this.SuspendLayout();
+            btnDeleteRecipe = new System.Windows.Forms.Button();
+            label1 = new System.Windows.Forms.Label();
+            txtSearch = new System.Windows.Forms.TextBox();
+            flowLayoutPanelUserRecipes = new System.Windows.Forms.FlowLayoutPanel();
+            SuspendLayout();
             // 
             // btnDeleteRecipe
             // 
-            this.btnDeleteRecipe.Location = new System.Drawing.Point(583, 12);
-            this.btnDeleteRecipe.Name = "btnDeleteRecipe";
-            this.btnDeleteRecipe.Size = new System.Drawing.Size(158, 46);
-            this.btnDeleteRecipe.TabIndex = 1;
-            this.btnDeleteRecipe.Text = "Удалить";
-            this.btnDeleteRecipe.UseVisualStyleBackColor = true;
-            this.btnDeleteRecipe.Click += new System.EventHandler(this.btnDeleteRecipe_Click_1);
+            btnDeleteRecipe.Location = new System.Drawing.Point(719, 15);
+            btnDeleteRecipe.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            btnDeleteRecipe.Name = "btnDeleteRecipe";
+            btnDeleteRecipe.Size = new System.Drawing.Size(158, 58);
+            btnDeleteRecipe.TabIndex = 1;
+            btnDeleteRecipe.Text = "Удалить";
+            btnDeleteRecipe.UseVisualStyleBackColor = true;
+            btnDeleteRecipe.Click += btnDeleteRecipe_Click_1;
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(581, 85);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(48, 17);
-            this.label1.TabIndex = 10;
-            this.label1.Text = "Поиск";
+            label1.AutoSize = true;
+            label1.Location = new System.Drawing.Point(717, 106);
+            label1.Name = "label1";
+            label1.Size = new System.Drawing.Size(52, 20);
+            label1.TabIndex = 10;
+            label1.Text = "Поиск";
             // 
             // txtSearch
             // 
-            this.txtSearch.Location = new System.Drawing.Point(583, 105);
-            this.txtSearch.Name = "txtSearch";
-            this.txtSearch.Size = new System.Drawing.Size(158, 22);
-            this.txtSearch.TabIndex = 9;
-            this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
+            txtSearch.Location = new System.Drawing.Point(719, 140);
+            txtSearch.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            txtSearch.Name = "txtSearch";
+            txtSearch.Size = new System.Drawing.Size(158, 27);
+            txtSearch.TabIndex = 9;
+            txtSearch.TextChanged += txtSearch_TextChanged;
             // 
             // flowLayoutPanelUserRecipes
             // 
-            this.flowLayoutPanelUserRecipes.AutoScroll = true;
-            this.flowLayoutPanelUserRecipes.Location = new System.Drawing.Point(12, 12);
-            this.flowLayoutPanelUserRecipes.Name = "flowLayoutPanelUserRecipes";
-            this.flowLayoutPanelUserRecipes.Size = new System.Drawing.Size(565, 426);
-            this.flowLayoutPanelUserRecipes.TabIndex = 11;
+            flowLayoutPanelUserRecipes.AutoScroll = true;
+            flowLayoutPanelUserRecipes.Location = new System.Drawing.Point(12, 15);
+            flowLayoutPanelUserRecipes.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            flowLayoutPanelUserRecipes.Name = "flowLayoutPanelUserRecipes";
+            flowLayoutPanelUserRecipes.Size = new System.Drawing.Size(701, 532);
+            flowLayoutPanelUserRecipes.TabIndex = 11;
             // 
             // UserStorageForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.Lavender;
-            this.ClientSize = new System.Drawing.Size(747, 450);
-            this.Controls.Add(this.flowLayoutPanelUserRecipes);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.txtSearch);
-            this.Controls.Add(this.btnDeleteRecipe);
-            this.Name = "UserStorageForm";
-            this.Text = "Избранное";
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+            AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            BackColor = System.Drawing.Color.Lavender;
+            ClientSize = new System.Drawing.Size(889, 562);
+            Controls.Add(flowLayoutPanelUserRecipes);
+            Controls.Add(label1);
+            Controls.Add(txtSearch);
+            Controls.Add(btnDeleteRecipe);
+            Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            Name = "UserStorageForm";
+            Text = "Избранное";
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion

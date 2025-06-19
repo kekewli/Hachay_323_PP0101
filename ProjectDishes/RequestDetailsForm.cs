@@ -2,6 +2,7 @@
 using System.Data;
 using System.Drawing;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ProjectDishes
@@ -14,26 +15,23 @@ namespace ProjectDishes
             InitializeComponent();
             AppStyle.ApplyStyle(this);
             this.requestId = requestId;
-            LoadRequestDetails();
+            _=LoadRequestDetails();
             this.MaximizeBox = false;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
         }
-        private void LoadRequestDetails() //загрузка заппросов
+        private async Task LoadRequestDetails() //загрузка заппросов
         {
-            var rpcParams = new { p0 = requestId };
-            DataTable dt = DatabaseHelper
-                .ExecuteQuery("get_request_details", rpcParams)
-                .GetAwaiter().GetResult();
+            var rpcParams = new { p_req_id = requestId };
+            var dt = await DatabaseHelper.ExecuteQuery("get_request_details", rpcParams);
             if (dt.Rows.Count == 0)
             {
-                MessageBox.Show("Информация о запросе не найдена.", "Ошибка",
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Информация о запросе не найдена.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.Close();
                 return;
             }
-            DataRow row = dt.Rows[0];
+            var row = dt.Rows[0];
 
-            lblRecipeName.Text = row["recipe_name"].ToString();
+            lblRecipeName.Text = $"Название: {row["recipe_name"].ToString()}";
             lblRecipeName.AutoSize = true;
             lblRecipeName.Size = new Size(320, lblRecipeName.PreferredHeight);
 
@@ -55,9 +53,11 @@ namespace ProjectDishes
             if (row["image"] != DBNull.Value)
             {
                 byte[] imageData = (byte[])row["image"];
-                using var ms = new MemoryStream(imageData);
-                pictureBoxRequest.Image = Image.FromStream(ms);
-                pictureBoxRequest.SizeMode = PictureBoxSizeMode.Zoom;
+                using (var ms = new MemoryStream(imageData))
+                {
+                    pictureBoxRequest.Image = Image.FromStream(ms);
+                    pictureBoxRequest.SizeMode = PictureBoxSizeMode.Zoom;
+                }
             }
             else
             {
