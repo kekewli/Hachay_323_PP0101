@@ -140,6 +140,45 @@ namespace ProjectDishes
                 return dt;
             }
         }
+        public static async Task<decimal?> ExecuteRpcScalarAsync(string functionName, object parameters = null)
+        {
+            if (Client == null && HasInternet())
+            {
+                try
+                {
+                    Client = new Supabase.Client(SupabaseUrl, SupabaseKey);
+                    Client.InitializeAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+                    _offlineMessageShown = false;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Ошибка инициализации DatabaseHelper", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return null;
+                }
+            }
+            if (!HasInternet() || Client == null)
+            {
+                if (!_offlineMessageShown)
+                {
+                    MessageBox.Show("Отсутствует подключение к интернету.", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    _offlineMessageShown = true;
+                }
+                return null;
+            }
+            else
+            {
+                try
+                {
+                    var result = await Client.Rpc<decimal?>(functionName, parameters);
+                    return result;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "DatabaseHelper.ExecuteRpcScalarAsync", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return null;
+                }
+            }
+        }
         public static int ExecuteNonQueryWithReturnValue(string functionName, object parameters = null)
         {
             if (Client == null && HasInternet())

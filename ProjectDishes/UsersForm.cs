@@ -16,7 +16,7 @@ namespace ProjectDishes
             this.MaximizeBox = false;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             _ = LoadUsers();
-            _refreshTimer = new Timer { Interval = 120000 };
+            _refreshTimer = new Timer { Interval = 10000 };
             _refreshTimer.Tick += async (_, __) => await LoadUsers();
             _refreshTimer.Start();
             AppStyle.ApplyDataGridViewStyle(dataGridViewUsers);
@@ -134,7 +134,7 @@ namespace ProjectDishes
                 MessageBox.Show("Не удалось обновить права.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        private void UsersForm_FormClosed(object sender, FormClosedEventArgs e) //выход
+        protected override void OnFormClosed(FormClosedEventArgs e)
         {
             _refreshTimer?.Stop();
             _refreshTimer?.Dispose();

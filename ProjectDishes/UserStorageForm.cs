@@ -13,6 +13,7 @@ namespace ProjectDishes
     {
         private int userId;
         private int? selectedRecipeId;
+        private readonly Timer _refreshTimer;
         public UserStorageForm(int userId)
         {
             InitializeComponent();
@@ -20,6 +21,9 @@ namespace ProjectDishes
             this.MaximizeBox = false;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             AppStyle.ApplyStyle(this);
+            _refreshTimer = new Timer { Interval = 10000 };
+            _refreshTimer.Tick += async (_, __) => await LoadUserRecipes();
+            _refreshTimer.Start();
             this.Shown += UserStorageForm_Shown;
         }
         private async void UserStorageForm_Shown(object sender, EventArgs e)
@@ -110,7 +114,8 @@ namespace ProjectDishes
         }
         private void OpenRecipeDetails(int recipeId) //открытие деталей
         {
-            RecipeDetailsForm detailsForm = new RecipeDetailsForm(recipeId);
+            bool isAdmin = false;
+            RecipeDetailsForm detailsForm = new RecipeDetailsForm(recipeId, userId, isAdmin);
             detailsForm.ShowDialog();
         }
         private void SelectRecipePanel(Panel panel) //выбор панели
@@ -173,6 +178,11 @@ namespace ProjectDishes
                 Panel recipePanel = CreateRecipePanel(row);
                 flowLayoutPanelUserRecipes.Controls.Add(recipePanel);
             }
+        }
+        protected override void OnFormClosed(FormClosedEventArgs e)
+        {
+            _refreshTimer?.Stop();
+            _refreshTimer?.Dispose();
         }
     }
 }

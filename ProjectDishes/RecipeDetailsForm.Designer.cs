@@ -37,6 +37,7 @@ namespace ProjectDishes
             txtIngredients = new System.Windows.Forms.TextBox();
             label1 = new System.Windows.Forms.Label();
             label2 = new System.Windows.Forms.Label();
+            btnRateRecipe = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)pictureBoxRecipe).BeginInit();
             SuspendLayout();
             // 
@@ -108,11 +109,22 @@ namespace ProjectDishes
             label2.TabIndex = 8;
             label2.Text = "Описание:";
             // 
+            // btnRateRecipe
+            // 
+            btnRateRecipe.Location = new System.Drawing.Point(656, 15);
+            btnRateRecipe.Name = "btnRateRecipe";
+            btnRateRecipe.Size = new System.Drawing.Size(132, 40);
+            btnRateRecipe.TabIndex = 9;
+            btnRateRecipe.UseCompatibleTextRendering = true;
+            btnRateRecipe.UseVisualStyleBackColor = true;
+            btnRateRecipe.Click += btnRateRecipe_Click;
+            // 
             // RecipeDetailsForm
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             ClientSize = new System.Drawing.Size(800, 452);
+            Controls.Add(btnRateRecipe);
             Controls.Add(label2);
             Controls.Add(label1);
             Controls.Add(txtIngredients);
@@ -138,5 +150,6 @@ namespace ProjectDishes
         private System.Windows.Forms.TextBox txtIngredients;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button btnRateRecipe;
     }
 }

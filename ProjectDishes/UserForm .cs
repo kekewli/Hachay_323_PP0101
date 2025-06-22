@@ -21,7 +21,7 @@ namespace ProjectDishes
             _ = LoadRecipes();
             this.MaximizeBox = false;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
-            _refreshTimer = new Timer { Interval = 120000 };
+            _refreshTimer = new Timer { Interval = 10000 };
             _refreshTimer.Tick += async (_, __) => await LoadRecipes();
             _refreshTimer.Start();
             AppStyle.ApplyStyle(this);
@@ -137,9 +137,10 @@ namespace ProjectDishes
         }
         private void OpenRecipeDetails(int recipeId) //открытие деталей рецепта
         {
+            bool isAdmin = false;
             try
             {
-                var detailsForm = new RecipeDetailsForm(recipeId);
+                var detailsForm = new RecipeDetailsForm(recipeId, userId, isAdmin);
                 detailsForm.ShowDialog();
             }
             catch { }
@@ -223,7 +224,6 @@ namespace ProjectDishes
         {
             _refreshTimer?.Stop();
             _refreshTimer?.Dispose();
-            base.OnFormClosed(e);
         }
         protected override async void OnLoad(EventArgs e)
         {
