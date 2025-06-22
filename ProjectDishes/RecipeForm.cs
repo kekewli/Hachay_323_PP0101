@@ -60,7 +60,7 @@ namespace ProjectDishes
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Ошибка при загрузке изображения: " + ex.Message);
+                    MessageBox.Show($"Ошибка при загрузке изображения: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -101,13 +101,13 @@ namespace ProjectDishes
             int catId = Convert.ToInt32(comboBoxCategory.SelectedValue);
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(desc) || string.IsNullOrEmpty(ingr))
             {
-                MessageBox.Show("Пожалуйста, заполните все поля.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Пожалуйста, заполните все поля.", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             if (recipeImage == null)
             {
                 var res = MessageBox.Show(
-                    "Вы не добавили изображение. Загрузить сейчас?", "Изображение отсутствует", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                    "Вы не добавили изображение. Добавить его сейчас?", "Изображение отсутствует", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                 if (res == DialogResult.Yes)
                 {
                     if (!TryLoadImageFromDialog())
@@ -134,7 +134,7 @@ namespace ProjectDishes
             if (recipeId == -1)
             {
                 ok = await DatabaseHelper.ExecuteNonQuery("add_recipe", rpcParams);
-                if (ok) MessageBox.Show("Рецепт успешно добавлен.");
+                if (ok) MessageBox.Show("Рецепт успешно добавлен.", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {
@@ -148,7 +148,7 @@ namespace ProjectDishes
                     p_image = recipeImage
                 };
                 ok = await DatabaseHelper.ExecuteNonQuery("update_recipe", updateParams);
-                if (ok) MessageBox.Show("Рецепт успешно обновлён.");
+                if (ok) MessageBox.Show("Рецепт успешно обновлён.", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             if (ok)
             {

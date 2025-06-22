@@ -29,6 +29,7 @@ namespace ProjectDishes
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AdminForm));
             btnAddRecipe = new System.Windows.Forms.Button();
             btnEditRecipe = new System.Windows.Forms.Button();
             btnDeleteRecipe = new System.Windows.Forms.Button();
@@ -140,6 +141,7 @@ namespace ProjectDishes
             Controls.Add(btnDeleteRecipe);
             Controls.Add(btnEditRecipe);
             Controls.Add(btnAddRecipe);
+            Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
             Name = "AdminForm";
             Text = "Управление";
             FormClosed += AdminForm_FormClosed;

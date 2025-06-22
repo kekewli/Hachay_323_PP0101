@@ -5,6 +5,7 @@ using System.Drawing;
 using System.IO;
 using System.Threading.Tasks;
 using Supabase.Postgrest;
+using System.Net.NetworkInformation;
 using System.Windows.Forms;
 
 namespace ProjectDishes
@@ -18,7 +19,7 @@ namespace ProjectDishes
             InitializeComponent();
             AppStyle.ApplyStyle(this);
             _=LoadRecipes();
-            _refreshTimer = new Timer { Interval = 10000 };
+            _refreshTimer = new Timer { Interval = 120000 };
             _refreshTimer.Tick += async (_, __) => await LoadRecipes();
             _refreshTimer.Start();
             this.MaximizeBox = false;
@@ -26,13 +27,17 @@ namespace ProjectDishes
         }
         private async Task LoadRecipes() //загрузка рецептов
         {
-            DataTable recipes = await DatabaseHelper.ExecuteQuery("get_all_recipes");
-            flowLayoutPanelRecipes.Controls.Clear();
-            foreach (DataRow row in recipes.Rows)
+            try
             {
-                Panel recipePanel = CreateRecipePanel(row);
-                flowLayoutPanelRecipes.Controls.Add(recipePanel);
+                DataTable recipes = await DatabaseHelper.ExecuteQuery("get_all_recipes");
+                flowLayoutPanelRecipes.Controls.Clear();
+                foreach (DataRow row in recipes.Rows)
+                {
+                    Panel recipePanel = CreateRecipePanel(row);
+                    flowLayoutPanelRecipes.Controls.Add(recipePanel);
+                }
             }
+            catch { }
         }
         private Panel CreateRecipePanel(DataRow row) //создание панелей
         {
@@ -129,8 +134,13 @@ namespace ProjectDishes
         }
         private void OpenRecipeDetails(int recipeId) //открытие деталей рецепта
         {
-            var detailsForm = new RecipeDetailsForm(recipeId);
-            detailsForm.ShowDialog();
+            try
+            {
+                var detailsForm = new RecipeDetailsForm(recipeId);
+                detailsForm.ShowDialog();
+            }
+            catch { }
+
         }
         private void btnAddRecipe_Click(object sender, EventArgs e) //добавление
         {
@@ -142,7 +152,7 @@ namespace ProjectDishes
         {
             if (selectedRecipeId == null)
             {
-                MessageBox.Show("Выберите рецепт для редактирования.");
+                MessageBox.Show("Выберите рецепт для редактирования.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             var editForm = new EditRecipeForm(selectedRecipeId.Value);
@@ -153,13 +163,13 @@ namespace ProjectDishes
         {
             if (selectedRecipeId == null)
             {
-                MessageBox.Show("Выберите рецепт для удаления.");
+                MessageBox.Show("Выберите рецепт для удаления.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             var rpcParams = new { p_recipe = selectedRecipeId.Value };
             bool ok = await DatabaseHelper.ExecuteNonQuery("delete_recipe", rpcParams);
             if (ok)
-                MessageBox.Show($"Рецепт с ID {selectedRecipeId} удалён.");
+                MessageBox.Show($"Рецепт с ID {selectedRecipeId} удалён.", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
             else
                 MessageBox.Show($"Не удалось удалить рецепт с ID {selectedRecipeId}.");
             await LoadRecipes();

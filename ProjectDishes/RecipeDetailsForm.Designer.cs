@@ -29,6 +29,7 @@ namespace ProjectDishes
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RecipeDetailsForm));
             pictureBoxRecipe = new System.Windows.Forms.PictureBox();
             lblRecipeName = new System.Windows.Forms.Label();
             lblCategory = new System.Windows.Forms.Label();
@@ -119,6 +120,7 @@ namespace ProjectDishes
             Controls.Add(lblCategory);
             Controls.Add(lblRecipeName);
             Controls.Add(pictureBoxRecipe);
+            Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
             Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             Name = "RecipeDetailsForm";
             Text = "Детали рецепта";

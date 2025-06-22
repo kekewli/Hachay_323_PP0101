@@ -27,10 +27,14 @@ namespace ProjectDishes
         }
         private async Task LoadCategories() //категории
         {
-            var dt = await DatabaseHelper.ExecuteQuery("get_categories");
-            cmbCategory.DataSource = dt;
-            cmbCategory.DisplayMember = "category_name";
-            cmbCategory.ValueMember = "category_id";
+            try
+            {
+                var dt = await DatabaseHelper.ExecuteQuery("get_categories");
+                cmbCategory.DataSource = dt;
+                cmbCategory.DisplayMember = "category_name";
+                cmbCategory.ValueMember = "category_id";
+            }
+            catch{}
         }
         private async Task LoadRecipeDetails() //детали рецепта
         {
@@ -153,8 +157,7 @@ namespace ProjectDishes
                 string.IsNullOrEmpty(description) ||
                 string.IsNullOrEmpty(ingredients))
             {
-                MessageBox.Show("Все поля должны быть заполнены.", "Ошибка",
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Все поля должны быть заполнены.", "Ошибка",MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             var rpcParams = new
@@ -169,13 +172,12 @@ namespace ProjectDishes
             bool ok = await DatabaseHelper.ExecuteNonQuery("update_recipe", rpcParams); // lower_snake_case
             if (ok)
             {
-                MessageBox.Show("Рецепт успешно обновлён.");
+                MessageBox.Show("Рецепт успешно обновлён.", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Close();
             }
             else
             {
-                MessageBox.Show("Ошибка при обновлении рецепта.", "Ошибка",
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Ошибка при обновлении рецепта.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void btnUploadImage_Click_1(object sender, EventArgs e) //загрузка изображения

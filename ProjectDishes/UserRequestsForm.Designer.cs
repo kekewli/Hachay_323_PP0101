@@ -29,6 +29,7 @@ namespace ProjectDishes
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserRequestsForm));
             btnApproveRecipe = new System.Windows.Forms.Button();
             backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             btnDeleteRequest = new System.Windows.Forms.Button();
@@ -74,6 +75,7 @@ namespace ProjectDishes
             Controls.Add(flowLayoutPanelRequests);
             Controls.Add(btnDeleteRequest);
             Controls.Add(btnApproveRecipe);
+            Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
             Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             Name = "UserRequestsForm";
             Text = "Запросы пользователей";

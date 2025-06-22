@@ -29,6 +29,7 @@ namespace ProjectDishes
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserForm));
             btnAddToStorage = new System.Windows.Forms.Button();
             btnOpenStorage = new System.Windows.Forms.Button();
             btnCreateRecipe = new System.Windows.Forms.Button();
@@ -116,6 +117,7 @@ namespace ProjectDishes
             Controls.Add(btnCreateRecipe);
             Controls.Add(btnOpenStorage);
             Controls.Add(btnAddToStorage);
+            Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
             Name = "UserForm";
             Text = "Форма пользователя";
             FormClosed += UserForm_FormClosed;

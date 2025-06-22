@@ -70,10 +70,8 @@ namespace ProjectDishes
             textBox.TabStop = false;
             textBox.Multiline = true;
         }
-
         private void RequestDetailsForm_Load(object sender, EventArgs e)
         {
-
         }
     }
 }

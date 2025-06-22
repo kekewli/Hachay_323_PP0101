@@ -29,6 +29,7 @@ namespace ProjectDishes
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RequestDetailsForm));
             label2 = new System.Windows.Forms.Label();
             label1 = new System.Windows.Forms.Label();
             txtIngredients = new System.Windows.Forms.TextBox();
@@ -118,6 +119,7 @@ namespace ProjectDishes
             Controls.Add(lblCategory);
             Controls.Add(lblRecipeName);
             Controls.Add(pictureBoxRequest);
+            Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
             Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             Name = "RequestDetailsForm";
             Text = "Form1";

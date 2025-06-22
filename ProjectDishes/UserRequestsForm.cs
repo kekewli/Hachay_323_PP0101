@@ -26,6 +26,11 @@ namespace ProjectDishes
         private async Task LoadUserRequests() //загрузка запросов 
         {
             DataTable userRequests = await DatabaseHelper.ExecuteQuery("get_user_recipe_requests");
+            if (userRequests == null || userRequests.Columns.Count == 0)
+            {
+                return;
+            }
+            if (userRequests == null || userRequests.Columns.Count == 0)
             flowLayoutPanelRequests.Controls.Clear();
             foreach (DataRow row in userRequests.Rows)
             {
@@ -119,15 +124,18 @@ namespace ProjectDishes
         }
         private void OpenRequestDetails(int requestId) //открытие деталей
         {
-            var detailsForm = new RequestDetailsForm(requestId);
-            detailsForm.ShowDialog();
+            try
+            {
+                var detailsForm = new RequestDetailsForm(requestId);
+                detailsForm.ShowDialog();
+            }
+            catch { }
         }
         private async void btnApproveRecipe_Click(object sender, EventArgs e) //подтверждение
         {
             if (_selectedRequestId == null)
             {
-                MessageBox.Show("Выберите запрос для утверждения.", "Ошибка",
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Выберите запрос для утверждения.", "Ошибка",MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             var rpcParams = new { p0 = _selectedRequestId.Value }; //получение деталя самого запроса
@@ -164,7 +172,7 @@ namespace ProjectDishes
                 return;
             }
             var rpcParams = new { p_request = _selectedRequestId.Value };
-            if (await DatabaseHelper.ExecuteNonQuery("delete_user_request", rpcParams)) // snake_case
+            if (await DatabaseHelper.ExecuteNonQuery("delete_user_request", rpcParams))
             {
                 MessageBox.Show("Запрос удалён.", "Готово", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 await LoadUserRequests();
@@ -173,6 +181,11 @@ namespace ProjectDishes
             {
                 MessageBox.Show("Не удалось удалить запрос.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+        private void UserRequestsForm_FormClosed(object sender, FormClosedEventArgs e) //выход
+        {
+            _refreshTimer?.Stop();
+            _refreshTimer?.Dispose();
         }
     }
 }

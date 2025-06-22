@@ -29,6 +29,7 @@ namespace ProjectDishes
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RecipeForm));
             txtRecipeName = new System.Windows.Forms.TextBox();
             txtDescription = new System.Windows.Forms.TextBox();
             txtIngredients = new System.Windows.Forms.TextBox();
@@ -173,6 +174,7 @@ namespace ProjectDishes
             Controls.Add(txtRecipeName);
             Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 204);
             ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
             Margin = new System.Windows.Forms.Padding(4);
             Name = "RecipeForm";
             Text = "Создание";

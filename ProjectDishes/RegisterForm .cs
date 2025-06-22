@@ -28,14 +28,12 @@ namespace ProjectDishes
             string email = txtEmail.Text.Trim();
             if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(password) || string.IsNullOrEmpty(email))
             {
-                MessageBox.Show("Введите все необходимые данные.", "Ошибка регистрации",
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Введите все необходимые данные.", "Ошибка регистрации",MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             if (!IsValidEmail(email))
             {
-                MessageBox.Show("Введите корректный адрес электронной почты.", "Ошибка регистрации",
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Введите корректный адрес электронной почты.", "Ошибка регистрации", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             string hashedPassword = HashPassword(password);
@@ -83,20 +81,15 @@ namespace ProjectDishes
         {
             this.Close();
         }
-
         private void RegisterForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             Application.Exit();
         }
-
         private void txtEmail_TextChanged(object sender, EventArgs e)
         {
-
         }
-
         private void label1_Click(object sender, EventArgs e)
         {
-
         }
     }
 }

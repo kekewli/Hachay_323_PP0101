@@ -21,20 +21,24 @@ namespace ProjectDishes
             _ = LoadRecipes();
             this.MaximizeBox = false;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
-            _refreshTimer = new Timer { Interval = 10000 };
+            _refreshTimer = new Timer { Interval = 120000 };
             _refreshTimer.Tick += async (_, __) => await LoadRecipes();
             _refreshTimer.Start();
             AppStyle.ApplyStyle(this);
         }
         private async Task LoadRecipes() //загрузка рецептов
         {
-            DataTable recipes = await DatabaseHelper.ExecuteQuery("get_all_recipes");
-            flowLayoutPanelRecipes.Controls.Clear();
-            foreach (DataRow row in recipes.Rows)
+            try
             {
-                Panel recipePanel = CreateRecipePanel(row);
-                flowLayoutPanelRecipes.Controls.Add(recipePanel);
+                DataTable recipes = await DatabaseHelper.ExecuteQuery("get_all_recipes");
+                flowLayoutPanelRecipes.Controls.Clear();
+                foreach (DataRow row in recipes.Rows)
+                {
+                    Panel recipePanel = CreateRecipePanel(row);
+                    flowLayoutPanelRecipes.Controls.Add(recipePanel);
+                }
             }
+            catch { }
         }
         private Panel CreateRecipePanel(DataRow row) //создание панелей
         {
@@ -133,8 +137,12 @@ namespace ProjectDishes
         }
         private void OpenRecipeDetails(int recipeId) //открытие деталей рецепта
         {
-            var detailsForm = new RecipeDetailsForm(recipeId);
-            detailsForm.ShowDialog();
+            try
+            {
+                var detailsForm = new RecipeDetailsForm(recipeId);
+                detailsForm.ShowDialog();
+            }
+            catch { }
         }
         private async void btnAddToStorage_Click(object sender, EventArgs e) //сохранение в избранное
         {
@@ -161,7 +169,7 @@ namespace ProjectDishes
 
             if (added)
             {
-                MessageBox.Show("Рецепт добавлен в избранное.", "Готово", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Рецепт добавлен в избранное.", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {
@@ -170,8 +178,14 @@ namespace ProjectDishes
         }
         private void btnOpenStorage_Click(object sender, EventArgs e) //открытие избранного
         {
-            var storageForm = new UserStorageForm(userId);
-            storageForm.ShowDialog();
+            try
+            {
+                var storageForm = new UserStorageForm(userId);
+                storageForm.ShowDialog();
+            }
+            catch {  }
+
+
         }
         private async void btnCreateRecipe_Click(object sender, EventArgs e) //создание рецепта
         {
@@ -201,7 +215,6 @@ namespace ProjectDishes
         private void UserForm_Load(object sender, EventArgs e)
         {
         }
-
         private void UserForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             Application.Exit();

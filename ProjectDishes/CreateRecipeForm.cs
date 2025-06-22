@@ -25,10 +25,15 @@ namespace ProjectDishes
         }
         private async Task LoadCategories() //категории
         {
-            DataTable categories = await DatabaseHelper.ExecuteQuery("get_categories");
-            cmbCategory.DataSource = categories;
-            cmbCategory.DisplayMember = "category_name";
-            cmbCategory.ValueMember = "category_id";
+            try
+            {
+                DataTable categories = await DatabaseHelper.ExecuteQuery("get_categories");
+                cmbCategory.DataSource = categories;
+                cmbCategory.DisplayMember = "category_name";
+                cmbCategory.ValueMember = "category_id";
+            }
+            catch { }
+
         }
         private void PictureBoxRecipe_DragEnter(object sender, DragEventArgs e)
         {
@@ -48,7 +53,7 @@ namespace ProjectDishes
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Ошибка при загрузке изображения: " + ex.Message);
+                    MessageBox.Show($"Ошибка при загрузке изображения: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -101,9 +106,7 @@ namespace ProjectDishes
                 }
                 else
                 {
-                    MessageBox.Show(
-                        "Рецепт не может быть сохранён без изображения.",
-                        "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Рецепт не может быть сохранён без изображения.","Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
             }
@@ -119,7 +122,7 @@ namespace ProjectDishes
             bool success = await DatabaseHelper.ExecuteNonQuery("submit_user_recipe", rpcParams);
             if (success)
             {
-                MessageBox.Show("Рецепт отправлен на рассмотрение.");
+                MessageBox.Show("Рецепт отправлен на рассмотрение.", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Close();
             }
         }

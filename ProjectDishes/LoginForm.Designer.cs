@@ -29,6 +29,7 @@ namespace ProjectDishes
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LoginForm));
             btnToLogin = new System.Windows.Forms.Button();
             btnLogin = new System.Windows.Forms.Button();
             label2 = new System.Windows.Forms.Label();
@@ -118,6 +119,7 @@ namespace ProjectDishes
             Controls.Add(label1);
             Controls.Add(txtPassword);
             Controls.Add(txtUserName);
+            Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
             Name = "LoginForm";
             Text = "Авторизация";
             FormClosed += LoginForm_FormClosed;

@@ -29,6 +29,7 @@ namespace ProjectDishes
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UsersForm));
             dataGridViewUsers = new System.Windows.Forms.DataGridView();
             btnDeleteUser = new System.Windows.Forms.Button();
             btnUpdateUser = new System.Windows.Forms.Button();
@@ -112,6 +113,7 @@ namespace ProjectDishes
             Controls.Add(btnDeleteUser);
             Controls.Add(btnUpdateUser);
             Controls.Add(dataGridViewUsers);
+            Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
             Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             Name = "UsersForm";
             Text = "Пользователи";

@@ -37,8 +37,7 @@ namespace ProjectDishes
             string email = txtEmail.Text.Trim();
             if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(email))
             {
-                MessageBox.Show("Введите имя пользователя и email.", "Ошибка",
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Введите имя пользователя и email.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             string hashedPassword = string.IsNullOrEmpty(newPassword) ? null : HashPassword(newPassword);

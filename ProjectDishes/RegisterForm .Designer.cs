@@ -29,6 +29,7 @@ namespace ProjectDishes
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RegisterForm));
             txtUserName = new System.Windows.Forms.TextBox();
             txtPassword = new System.Windows.Forms.TextBox();
             label1 = new System.Windows.Forms.Label();
@@ -142,6 +143,7 @@ namespace ProjectDishes
             Controls.Add(label1);
             Controls.Add(txtPassword);
             Controls.Add(txtUserName);
+            Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
             Name = "RegisterForm";
             Text = "Регистрация";
             FormClosed += RegisterForm_FormClosed;

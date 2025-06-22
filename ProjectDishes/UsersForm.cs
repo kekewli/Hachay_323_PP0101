@@ -9,35 +9,51 @@ namespace ProjectDishes
 {
     public partial class UsersForm : Form
     {
+        private readonly Timer _refreshTimer;
         public UsersForm()
         {
             InitializeComponent();
             this.MaximizeBox = false;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             _ = LoadUsers();
+            _refreshTimer = new Timer { Interval = 120000 };
+            _refreshTimer.Tick += async (_, __) => await LoadUsers();
+            _refreshTimer.Start();
             AppStyle.ApplyDataGridViewStyle(dataGridViewUsers);
             AppStyle.ApplyStyle(this);
         }
-        private async Task LoadUsers() //загрухка пользователей
+        private async Task LoadUsers() //загрузка пользователей
         {
             DataTable users = await DatabaseHelper.ExecuteQuery("get_all_users");
-
+            if (users == null || users.Columns.Count == 0)
+            {
+                return;
+            }
             dataGridViewUsers.DataSource = users;
             if (dataGridViewUsers.Columns.Contains("role_id"))
                 dataGridViewUsers.Columns["role_id"].Visible = false;
             if (dataGridViewUsers.Columns.Contains("is_admin"))
                 dataGridViewUsers.Columns["is_admin"].Visible = false;
-            dataGridViewUsers.Columns["role_name"].HeaderText = "Роль";
-            dataGridViewUsers.Columns["user_name"].HeaderText = "Имя пользователя";
-            dataGridViewUsers.Columns["password_hash"].HeaderText = "Пароль";
-            dataGridViewUsers.Columns["email"].HeaderText = "Электронная почта";
-            dataGridViewUsers.Columns["user_id"].HeaderText = "ID пользователя";
+            if (dataGridViewUsers.Columns.Contains("role_name"))
+                dataGridViewUsers.Columns["role_name"].HeaderText = "Роль";
+            if (dataGridViewUsers.Columns.Contains("user_name"))
+                dataGridViewUsers.Columns["user_name"].HeaderText = "Имя пользователя";
+            if (dataGridViewUsers.Columns.Contains("password_hash"))
+                dataGridViewUsers.Columns["password_hash"].HeaderText = "Пароль";
+            if (dataGridViewUsers.Columns.Contains("email"))
+                dataGridViewUsers.Columns["email"].HeaderText = "Электронная почта";
+            if (dataGridViewUsers.Columns.Contains("user_id"))
+                dataGridViewUsers.Columns["user_id"].HeaderText = "ID пользователя";
         }
         private async void txtSearch_TextChanged(object sender, EventArgs e) //поиск
         {
             string keyword = txtSearch.Text.Trim();
             var rpcParams = new { p_key = keyword };
             DataTable users = await DatabaseHelper.ExecuteQuery("search_users", rpcParams);
+            if (users == null || users.Columns.Count == 0)
+            {
+                return;
+            }
             dataGridViewUsers.DataSource = users;
             if (dataGridViewUsers.Columns.Contains("role_id"))
                 dataGridViewUsers.Columns["role_id"].Visible = false;
@@ -111,12 +127,17 @@ namespace ProjectDishes
             if (ok)
             {
                 MessageBox.Show("Права пользователя обновлены.", "Готово", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                _ = LoadUsers();
+                _= LoadUsers();
             }
             else
             {
                 MessageBox.Show("Не удалось обновить права.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+        private void UsersForm_FormClosed(object sender, FormClosedEventArgs e) //выход
+        {
+            _refreshTimer?.Stop();
+            _refreshTimer?.Dispose();
         }
     }
 }
