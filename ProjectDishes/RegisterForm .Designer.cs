@@ -34,7 +34,7 @@ namespace ProjectDishes
             txtPassword = new System.Windows.Forms.TextBox();
             label1 = new System.Windows.Forms.Label();
             label2 = new System.Windows.Forms.Label();
-            btnLogin = new System.Windows.Forms.Button();
+            btnRegister = new System.Windows.Forms.Button();
             btnToLogin = new System.Windows.Forms.Button();
             label3 = new System.Windows.Forms.Label();
             txtEmail = new System.Windows.Forms.TextBox();
@@ -78,15 +78,15 @@ namespace ProjectDishes
             label2.TabIndex = 4;
             label2.Text = "Пароль";
             // 
-            // btnLogin
+            // btnRegister
             // 
-            btnLogin.Location = new System.Drawing.Point(124, 314);
-            btnLogin.Name = "btnLogin";
-            btnLogin.Size = new System.Drawing.Size(180, 51);
-            btnLogin.TabIndex = 6;
-            btnLogin.Text = "Зарегистрировать";
-            btnLogin.UseVisualStyleBackColor = true;
-            btnLogin.Click += btnLogin_Click;
+            btnRegister.Location = new System.Drawing.Point(124, 314);
+            btnRegister.Name = "btnRegister";
+            btnRegister.Size = new System.Drawing.Size(180, 51);
+            btnRegister.TabIndex = 6;
+            btnRegister.Text = "Зарегистрировать";
+            btnRegister.UseVisualStyleBackColor = true;
+            btnRegister.Click += btnLogin_Click;
             // 
             // btnToLogin
             // 
@@ -138,7 +138,7 @@ namespace ProjectDishes
             Controls.Add(label3);
             Controls.Add(txtEmail);
             Controls.Add(btnToLogin);
-            Controls.Add(btnLogin);
+            Controls.Add(btnRegister);
             Controls.Add(label2);
             Controls.Add(label1);
             Controls.Add(txtPassword);
@@ -157,7 +157,7 @@ namespace ProjectDishes
         private System.Windows.Forms.TextBox txtPassword;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button btnLogin;
+        private System.Windows.Forms.Button btnRegister;
         private System.Windows.Forms.Button btnToLogin;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox txtEmail;
