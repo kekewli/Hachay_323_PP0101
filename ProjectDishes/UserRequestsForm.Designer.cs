@@ -60,6 +60,7 @@ namespace ProjectDishes
             // 
             // flowLayoutPanelRequests
             // 
+            flowLayoutPanelRequests.AutoScroll = true;
             flowLayoutPanelRequests.Location = new System.Drawing.Point(12, 15);
             flowLayoutPanelRequests.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             flowLayoutPanelRequests.Name = "flowLayoutPanelRequests";

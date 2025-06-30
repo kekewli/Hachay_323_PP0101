@@ -20,7 +20,7 @@ namespace ProjectDishes
         private static Supabase.Client Client;
         private static bool _offlineMessageShown = false;
 
-        private static bool HasInternet()
+        private static bool HasInternet() //проверка интернет-соединения
         {
             try
             {
@@ -35,7 +35,7 @@ namespace ProjectDishes
                 return false;
             }
         }
-        static DatabaseHelper()
+        static DatabaseHelper() //инициализация клиента
         {
             if (!HasInternet())
             {
@@ -60,7 +60,7 @@ namespace ProjectDishes
                 }
             }
         }
-        public static async Task<bool> ExecuteNonQuery(string functionName, object parameters = null)
+        public static async Task<bool> ExecuteNonQuery(string functionName, object parameters = null) //вызов функции без возвращаемого значения
         {
             if (Client == null && HasInternet())
             {
@@ -80,7 +80,7 @@ namespace ProjectDishes
             {
                 if (!_offlineMessageShown)
                 {
-                    MessageBox.Show("Отсутствует подключение к интернету.", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("ExecuteNonQuery Отсутствует подключение к интернету.", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     _offlineMessageShown = true;
                 }
                 return false;
@@ -99,7 +99,7 @@ namespace ProjectDishes
                 }
             }
         }
-        public static async Task<DataTable> ExecuteQuery(string functionName, object parameters = null)
+        public static async Task<DataTable> ExecuteQuery(string functionName, object parameters = null) //вызов функции с возвращаемым значением
         {
             if (Client == null && HasInternet())
             {
@@ -120,7 +120,7 @@ namespace ProjectDishes
             { 
                 if (!_offlineMessageShown)
                 {
-                    MessageBox.Show("Отсутствует подключение к интернету.", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("ExecuteQuery Отсутствует подключение к интернету.", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     _offlineMessageShown = true;
                 }
                 return dt;
@@ -140,7 +140,7 @@ namespace ProjectDishes
                 return dt;
             }
         }
-        public static async Task<decimal?> ExecuteRpcScalarAsync(string functionName, object parameters = null)
+        public static async Task<decimal?> ExecuteRpcScalarAsync(string functionName, object parameters = null) //вызов функции с плавающей точкой
         {
             if (Client == null && HasInternet())
             {
@@ -160,7 +160,7 @@ namespace ProjectDishes
             {
                 if (!_offlineMessageShown)
                 {
-                    MessageBox.Show("Отсутствует подключение к интернету.", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("ExecuteRpcScalarAsync Отсутствует подключение к интернету.", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     _offlineMessageShown = true;
                 }
                 return null;
@@ -179,7 +179,7 @@ namespace ProjectDishes
                 }
             }
         }
-        public static int ExecuteNonQueryWithReturnValue(string functionName, object parameters = null)
+        public static int ExecuteNonQueryWithReturnValue(string functionName, object parameters = null) //вызов функции с целочислинным значением
         {
             if (Client == null && HasInternet())
             {
@@ -199,7 +199,7 @@ namespace ProjectDishes
             {
                 if (!_offlineMessageShown)
                 {
-                    MessageBox.Show("Отсутствует подключение к интернету.", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("ExecuteNonQueryWithReturnValue Отсутствует подключение к интернету.", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     _offlineMessageShown = true;
                 }
                 return -1;

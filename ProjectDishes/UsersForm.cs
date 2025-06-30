@@ -92,7 +92,7 @@ namespace ProjectDishes
             bool ok = await DatabaseHelper.ExecuteNonQuery("delete_user_and_recipes", rpcParams);  // snake_case
             if (ok)
             {
-                MessageBox.Show("Пользователь и его рецепты удалены.", "Готово", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Пользователь удален.", "Готово", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 _ = LoadUsers();
             }
             else

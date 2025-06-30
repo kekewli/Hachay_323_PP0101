@@ -19,7 +19,7 @@ namespace ProjectDishes
             this.MaximizeBox = false;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
         }
-        private async Task LoadRequestDetails() //загрузка заппросов
+        private async Task LoadRequestDetails() //загрузка запросов
         {
             var rpcParams = new { p_req_id = requestId };
             var dt = await DatabaseHelper.ExecuteQuery("get_request_details", rpcParams);

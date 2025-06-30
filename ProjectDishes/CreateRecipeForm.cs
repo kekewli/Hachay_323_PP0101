@@ -4,7 +4,6 @@ using System.Drawing;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Media;
 using Newtonsoft.Json;
 
 namespace ProjectDishes

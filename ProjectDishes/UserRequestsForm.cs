@@ -30,7 +30,6 @@ namespace ProjectDishes
             {
                 return;
             }
-            if (userRequests == null || userRequests.Columns.Count == 0)
             flowLayoutPanelRequests.Controls.Clear();
             foreach (DataRow row in userRequests.Rows)
             {
@@ -142,21 +141,38 @@ namespace ProjectDishes
             DataTable dt = await DatabaseHelper.ExecuteQuery("get_request_details_by_id", rpcParams);
             if (dt.Rows.Count == 0) return;
             DataRow row = dt.Rows[0];
+            var imgValue = row["image"];
+            byte[] imgBytes = null;
+            if (imgValue != DBNull.Value)
+            {
+                if (imgValue is byte[] bytes)
+                {
+                    imgBytes = bytes;
+                }
+                else if (imgValue is string hexString)
+                {
+                    if (hexString.StartsWith("\\x") || hexString.StartsWith("0x"))
+                        hexString = hexString.Substring(2);
+                    int len = hexString.Length;
+                    imgBytes = new byte[len / 2];
+                    for (int i = 0; i < len; i += 2)
+                        imgBytes[i / 2] = Convert.ToByte(hexString.Substring(i, 2), 16);
+                }
+            }
             var rpcAdd = new
             {
                 p_name = row["recipe_name"].ToString(),
                 p_desc = row["description"].ToString(),
                 p_ingr = row["ingredients"].ToString(),
                 p_cat_id = Convert.ToInt32(row["category_id"]),
-                p_image = row["image"] is DBNull ? null : (byte[])row["image"]
+                p_image = imgBytes
             };
             if (await DatabaseHelper.ExecuteNonQuery("add_recipe", rpcAdd)) //добавление рецепта в основную таблицу
             {
-                var rpcDel = new { p0 = _selectedRequestId.Value };
+                var rpcDel = new { p_request = _selectedRequestId.Value };
                 await DatabaseHelper.ExecuteNonQuery("delete_user_request", rpcDel);
 
-                MessageBox.Show("Запрос утверждён.", "Готово",
-                                MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Запрос утверждён.", "Готово", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 await LoadUserRequests();
             }
             else

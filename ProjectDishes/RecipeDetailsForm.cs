@@ -117,12 +117,12 @@ namespace ProjectDishes
         private void pictureBoxRecipe_Click(object sender, EventArgs e)
         {
         }
-        private async void btnRateRecipe_Click(object sender, EventArgs e)
+        private async void btnRateRecipe_Click(object sender, EventArgs e) //кнопка оценнки
         {
             string input = Microsoft.VisualBasic.Interaction.InputBox("Поставьте оценку рецепту (1–5):","Оценить рецепт","5");
             if (!int.TryParse(input, out int rating) || rating < 1 || rating > 5)
             {
-                MessageBox.Show("Пожалуйста, введите число от 1 до 5.", "Неверный формат", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Пожалуйста, введите число от 1 до 5.", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             var rpcParams = new
